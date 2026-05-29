@@ -1,0 +1,38 @@
+[project]
+name = "photo-organiser-ai"
+version = "0.1.0"
+description = "FastAPI backend for AI-powered photo album organisation"
+readme = "README.md"
+authors = [
+    { name = "Saquib Alam", email = "saquib764@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "httpx",
+    "pillow>=11.0.0",
+    "colorthief>=0.2.1",
+    "openai>=2.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.12.2",
+]
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

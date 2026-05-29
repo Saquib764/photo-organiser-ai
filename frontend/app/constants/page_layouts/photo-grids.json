@@ -1,0 +1,1463 @@
+[
+  {
+    "id": "feature_strip",
+    "category": "grids",
+    "name": "Feature + strip",
+    "description": "One large feature image with three smaller thumbnails in a horizontal strip. Highlights a key photo with contextual supporting shots.",
+    "slots": [
+      {
+        "id": "feature",
+        "label": "Feature",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s1",
+        "label": "Strip 1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s2",
+        "label": "Strip 2",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s3",
+        "label": "Strip 3",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette; should not compete with photography"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "feature",
+              "placeholder": "Feature",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-3 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s1",
+                  "placeholder": "s1",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s2",
+                  "placeholder": "s2",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s3",
+                  "placeholder": "s3",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "hero_pair",
+    "category": "grids",
+    "name": "Hero + pair",
+    "description": "One large hero image with two smaller supporting images below. Good for a main moment plus detail shots.",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "left",
+        "label": "Left",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "right",
+        "label": "Right",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette; should not compete with photography"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Hero",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-2 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "left",
+                  "placeholder": "left",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "right",
+                  "placeholder": "right",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "hero_pair_note_left",
+    "category": "grids",
+    "name": "Hero + pair + note (left)",
+    "description": "Large hero on top with a detail thumbnail and typography cell below — text on the left, image on the right.",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "right",
+        "label": "Right",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "Surrounded by love and laughter.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown note in the left cell below the hero"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Hero",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-2 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "flex items-center justify-center overflow-hidden p-2",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "note",
+                  "multiline": true,
+                  "class": "w-full text-center leading-snug",
+                  "when": "always"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "right",
+                  "placeholder": "right",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "hero_pair_note_right",
+    "category": "grids",
+    "name": "Hero + pair + note (right)",
+    "description": "Large hero on top with a detail thumbnail and typography cell below — image on the left, text on the right.",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "left",
+        "label": "Left",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "Surrounded by love and laughter.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown note in the right cell below the hero"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Hero",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-2 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "left",
+                  "placeholder": "left",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "flex items-center justify-center overflow-hidden p-2",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "note",
+                  "multiline": true,
+                  "class": "w-full text-center leading-snug",
+                  "when": "always"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "quad_grid",
+    "category": "grids",
+    "name": "Four grid",
+    "description": "Four equal images in a 2×2 grid. Best for sequences, group shots, or thematic sets of similar weight.",
+    "slots": [
+      {
+        "id": "tl",
+        "label": "Top left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "tr",
+        "label": "Top right",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "bl",
+        "label": "Bottom left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "br",
+        "label": "Bottom right",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette; should not compete with photography"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 grid-rows-2 gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tl",
+              "placeholder": "tl",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tr",
+              "placeholder": "tr",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "bl",
+              "placeholder": "bl",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "br",
+              "placeholder": "br",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "full_bleed_caption",
+    "category": "grids",
+    "name": "Full bleed + caption",
+    "description": "Single full-bleed hero image with a short caption overlaid at the bottom. Best for iconic moments with a place name or date line.",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "THE WEDDING DAY",
+        "color_hint": "Dark warm brown caption on a near-white translucent pill over the photo; short line with padding around text only",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "500",
+        "default_letter_spacing": "0.14em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Full-bleed photo; no separate sheet color",
+      "overlay": "Near-white translucent pill behind caption text only (not full-image scrim)",
+      "text_primary": "Dark warm brown uppercase caption on the white pill; 3–8 words"
+    },
+    "page_role": null,
+    "render": {
+      "type": "box",
+      "class": "h-full w-full overflow-hidden",
+      "children": [
+        {
+          "type": "image",
+          "slotId": "hero",
+          "placeholder": "Hero",
+          "dimmed": false,
+          "borderRadius": "inherit",
+          "overlay": {
+            "textSlotId": "caption",
+            "x": "center",
+            "y": "bottom",
+            "when": "always",
+            "class": "text-center"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hero_pair_caption",
+    "category": "grids",
+    "name": "Hero + pair + caption",
+    "description": "Large hero with bottom caption overlay, plus two supporting images below.",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "left",
+        "label": "Left",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "right",
+        "label": "Right",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "OUR FOREVER BEGINS",
+        "color_hint": "Dark warm brown caption on a near-white translucent pill over the photo; short line with padding around text only",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.65rem",
+        "default_font_weight": "500",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "left",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "overlay": "Near-white translucent pill behind hero caption only",
+      "text_primary": "Dark warm brown caption on the white pill"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "relative min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Hero",
+              "dimmed": true,
+              "borderRadius": "inherit",
+              "overlay": {
+                "textSlotId": "caption",
+                "x": "left",
+                "y": "bottom",
+                "when": "always",
+                "class": "text-left"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-2 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "left",
+                  "placeholder": "left",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "right",
+                  "placeholder": "right",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "split_diptych_caption",
+    "category": "grids",
+    "name": "Diptych + captions",
+    "description": "Two side-by-side portraits, each with an optional bottom caption overlay.",
+    "slots": [
+      {
+        "id": "left",
+        "label": "Left",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "right",
+        "label": "Right",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "left_caption",
+        "label": "Left caption",
+        "default_text": "BRIDE",
+        "color_hint": "Dark warm brown label on a near-white translucent pill; very short (e.g. Bride, Groom)",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "500",
+        "default_letter_spacing": "0.2em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      },
+      {
+        "id": "right_caption",
+        "label": "Right caption",
+        "default_text": "GROOM",
+        "color_hint": "Dark warm brown label on a near-white translucent pill; very short (e.g. Bride, Groom)",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "500",
+        "default_letter_spacing": "0.2em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "overlay": "Near-white translucent pill behind each panel caption",
+      "text_primary": "Dark warm brown uppercase labels on the white pill"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 gap-2 overflow-hidden p-2",
+      "gap": 8,
+      "children": [
+        {
+          "type": "box",
+          "class": "relative overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "left",
+              "placeholder": "left",
+              "dimmed": true,
+              "borderRadius": "inherit",
+              "overlay": {
+                "textSlotId": "left_caption",
+                "x": "center",
+                "y": "bottom",
+                "when": "always",
+                "class": "text-center"
+              }
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "relative overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "right",
+              "placeholder": "right",
+              "dimmed": true,
+              "borderRadius": "inherit",
+              "overlay": {
+                "textSlotId": "right_caption",
+                "x": "center",
+                "y": "bottom",
+                "when": "always",
+                "class": "text-center"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature_strip_caption",
+    "category": "grids",
+    "name": "Feature + strip + caption",
+    "description": "Large feature image with top caption overlay and three supporting thumbnails.",
+    "slots": [
+      {
+        "id": "feature",
+        "label": "Feature",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s1",
+        "label": "Strip 1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s2",
+        "label": "Strip 2",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s3",
+        "label": "Strip 3",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "THE CELEBRATION",
+        "color_hint": "Dark warm brown caption on a near-white translucent pill over the photo; short line with padding around text only",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.65rem",
+        "default_font_weight": "500",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "overlay": "Near-white translucent pill behind feature caption only",
+      "text_primary": "Dark warm brown caption on the white pill"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "relative min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "feature",
+              "placeholder": "Feature",
+              "dimmed": true,
+              "borderRadius": "inherit",
+              "overlay": {
+                "textSlotId": "caption",
+                "x": "center",
+                "y": "top",
+                "when": "always",
+                "class": "text-center"
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-3 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s1",
+                  "placeholder": "s1",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s2",
+                  "placeholder": "s2",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s3",
+                  "placeholder": "s3",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "quad_grid_caption",
+    "category": "grids",
+    "name": "Three grid + caption (right)",
+    "description": "Three photos in a 2×2 grid with a typography cell in the bottom-right — ideal for a short quote, date, or location line.",
+    "slots": [
+      {
+        "id": "tl",
+        "label": "Top left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "tr",
+        "label": "Top right",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "bl",
+        "label": "Bottom left",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "Memories we will cherish",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.75rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown centered caption in the open grid cell"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 grid-rows-2 gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tl",
+              "placeholder": "tl",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tr",
+              "placeholder": "tr",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "bl",
+              "placeholder": "bl",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "flex items-center justify-center overflow-hidden p-3",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "caption",
+              "multiline": true,
+              "class": "w-full text-center leading-snug",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature_strip_note",
+    "category": "grids",
+    "name": "Feature + strip + note (right)",
+    "description": "Large feature image with two strip thumbnails and a text note cell on the right — for location, date, or a short line.",
+    "slots": [
+      {
+        "id": "feature",
+        "label": "Feature",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s1",
+        "label": "Strip 1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s2",
+        "label": "Strip 2",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "A celebration of love & joy",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown note in the third strip cell (place · date or short quote)"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "feature",
+              "placeholder": "Feature",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-3 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s1",
+                  "placeholder": "s1",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s2",
+                  "placeholder": "s2",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "flex items-center justify-center overflow-hidden p-2",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "note",
+                  "multiline": true,
+                  "class": "w-full text-center leading-snug",
+                  "when": "always"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "quad_grid_caption_left",
+    "category": "grids",
+    "name": "Three grid + caption (left)",
+    "description": "Three photos in a 2×2 grid with a typography cell in the bottom-left — ideal for a short quote, date, or location line.",
+    "slots": [
+      {
+        "id": "tl",
+        "label": "Top left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "tr",
+        "label": "Top right",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "br",
+        "label": "Bottom right",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "Memories we will cherish",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.75rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown centered caption in the open grid cell"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 grid-rows-2 gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tl",
+              "placeholder": "tl",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "tr",
+              "placeholder": "tr",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "flex items-center justify-center overflow-hidden p-3",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "caption",
+              "multiline": true,
+              "class": "w-full text-center leading-snug",
+              "when": "always"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "br",
+              "placeholder": "br",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature_strip_note_left",
+    "category": "grids",
+    "name": "Feature + strip + note (left)",
+    "description": "Large feature image with a text note cell on the left and two strip thumbnails on the right — for location, date, or a short line.",
+    "slots": [
+      {
+        "id": "feature",
+        "label": "Feature",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s1",
+        "label": "Strip 1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s2",
+        "label": "Strip 2",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "A celebration of love & joy",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown note in the first strip cell (place · date or short quote)"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "feature",
+              "placeholder": "Feature",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-3 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "flex items-center justify-center overflow-hidden p-2",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "note",
+                  "multiline": true,
+                  "class": "w-full text-center leading-snug",
+                  "when": "always"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s1",
+                  "placeholder": "s1",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s2",
+                  "placeholder": "s2",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "feature_strip_note_left_bottom",
+    "category": "grids",
+    "name": "Feature + strip + note (left, feature bottom)",
+    "description": "Strip row on top with a text note cell on the left and two thumbnails on the right; large feature image along the bottom — for location, date, or a short line above the hero.",
+    "slots": [
+      {
+        "id": "feature",
+        "label": "Feature",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s1",
+        "label": "Strip 1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "s2",
+        "label": "Strip 2",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "A celebration of love & joy",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown note in the first strip cell (place · date or short quote)"
+    },
+    "page_role": null,
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-2 overflow-hidden p-2",
+      "children": [
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-3 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "flex items-center justify-center overflow-hidden p-2",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "note",
+                  "multiline": true,
+                  "class": "w-full text-center leading-snug",
+                  "when": "always"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s1",
+                  "placeholder": "s1",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "s2",
+                  "placeholder": "s2",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "feature",
+              "placeholder": "Feature",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "split_column_note_left",
+    "category": "grids",
+    "name": "Column note (text left)",
+    "description": "Two equal columns: typography on the left and a single portrait on the right — for quotes, dates, or chapter lines beside a hero shot.",
+    "slots": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "Every moment led us here.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.8rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown centered note in the left column"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 gap-2 overflow-hidden p-2",
+      "gap": 8,
+      "children": [
+        {
+          "type": "box",
+          "class": "flex items-center justify-center overflow-hidden p-4",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "note",
+              "multiline": true,
+              "class": "w-full text-center leading-snug",
+              "when": "always"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "photo",
+              "placeholder": "photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "split_column_note_right",
+    "category": "grids",
+    "name": "Column note (text right)",
+    "description": "Two equal columns: single portrait on the left and typography on the right — for quotes, dates, or chapter lines beside a hero shot.",
+    "slots": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "note",
+        "label": "Note",
+        "default_text": "Every moment led us here.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on neutral sheet",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.8rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Neutral sheet or color pulled from the primary image palette",
+      "text_primary": "Dark warm brown centered note in the right column"
+    },
+    "page_role": null,
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 gap-2 overflow-hidden p-2",
+      "gap": 8,
+      "children": [
+        {
+          "type": "box",
+          "class": "overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "photo",
+              "placeholder": "photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "flex items-center justify-center overflow-hidden p-4",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "note",
+              "multiline": true,
+              "class": "w-full text-center leading-snug",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

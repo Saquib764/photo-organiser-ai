@@ -1,0 +1,5 @@
+export { default as PhotobookLayoutRenderer } from './PhotobookLayoutRenderer.vue'
+export { default as PhotobookImageBlock } from './PhotobookImageBlock.vue'
+export { default as PhotobookRenderNode } from './PhotobookRenderNode.vue'
+export { default as PhotobookSlotCell } from './PhotobookSlotCell.vue'
+export { default as PhotobookTextSlot } from './PhotobookTextSlot.vue'

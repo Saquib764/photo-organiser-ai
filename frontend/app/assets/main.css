@@ -1,0 +1,171 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Single light theme — ignore OS dark mode; Flow Studio palette applied in :root */
+@variant dark (false);
+
+/* Design tokens — UI_DESIGN_GUIDELINES.md §5 Flow Studio + §7 */
+:root {
+  --tf-primary: #ec4899;
+  --tf-primary-muted: rgba(236, 72, 153, 0.15);
+
+  /* Flow Studio surfaces */
+  --fs-bg-canvas: #030712;
+  --fs-bg-panel: #111827;
+  --fs-bg-elevated: #1f2937;
+  --fs-border: #1f2937;
+  --fs-border-subtle: #374151;
+
+  --tf-bg-page: var(--fs-bg-canvas);
+  --tf-bg-surface: var(--fs-bg-panel);
+  --tf-bg-muted: var(--fs-bg-elevated);
+  --tf-border: var(--fs-border);
+  --tf-text: #e5e7eb;
+  --tf-text-muted: #9ca3af;
+  --tf-text-dimmed: #6b7280;
+  --tf-nav-gradient-from: #111827;
+  --tf-nav-gradient-to: #1f2937;
+
+  --tf-folder-panel-width: 320px;
+  --tf-photobook-extra-width: 280px;
+  --tf-header-height: 64px;
+
+  --ui-radius: 0.5rem;
+  --ui-header-height: var(--tf-header-height);
+  --ui-container: 72rem;
+}
+
+/* Nuxt UI semantic tokens — Flow Studio dark chrome */
+:root,
+.dark {
+  --ui-primary: var(--ui-color-primary-500);
+  --ui-secondary: var(--ui-color-secondary-500);
+  --ui-success: var(--ui-color-success-500);
+  --ui-info: var(--ui-color-info-500);
+  --ui-warning: var(--ui-color-warning-500);
+  --ui-error: var(--ui-color-error-500);
+
+  --ui-text-dimmed: #6b7280;
+  --ui-text-muted: #9ca3af;
+  --ui-text-toned: #d1d5db;
+  --ui-text: #e5e7eb;
+  --ui-text-highlighted: #ffffff;
+  --ui-text-inverted: #ffffff;
+
+  --ui-bg: var(--fs-bg-panel);
+  --ui-bg-muted: var(--fs-bg-elevated);
+  --ui-bg-elevated: #374151;
+  --ui-bg-accented: #4b5563;
+  --ui-bg-inverted: var(--fs-bg-canvas);
+
+  --ui-border: var(--fs-border);
+  --ui-border-muted: var(--fs-border);
+  --ui-border-accented: var(--fs-border-subtle);
+  --ui-border-inverted: #6b7280;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  body {
+    color-scheme: dark;
+    background-color: var(--tf-bg-page);
+    color: var(--ui-text);
+  }
+
+  ::selection {
+    background-color: rgba(236, 72, 153, 0.35);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .tf-heading {
+    @apply font-semibold text-white;
+  }
+
+  .tf-body {
+    @apply text-gray-300;
+  }
+
+  .tf-muted {
+    @apply text-gray-500;
+  }
+
+  .tf-link {
+    @apply text-gray-300 transition-colors hover:text-primary-400;
+  }
+
+  .tf-section-title {
+    @apply text-xs font-bold uppercase tracking-widest text-gray-400;
+  }
+
+  .tf-section-subtitle {
+    @apply mt-1 max-w-2xl text-sm text-gray-500;
+  }
+
+  .tf-page-title {
+    @apply text-base font-bold text-white sm:text-lg;
+  }
+
+  .tf-count-badge {
+    @apply inline-flex rounded-full border border-primary-500/20 bg-primary-500/10 px-2.5 py-0.5 text-xs font-medium text-primary-400;
+  }
+
+  .tf-panel {
+    @apply border border-gray-800 bg-gray-900;
+  }
+
+  .tf-panel-inset {
+    @apply border border-gray-800 bg-gray-950;
+  }
+
+  .tf-card {
+    @apply rounded-lg border border-gray-800 bg-gray-900 p-5;
+  }
+
+  .tf-card-label {
+    @apply text-[10px] font-bold uppercase tracking-widest text-gray-500;
+  }
+
+  .tf-card-value {
+    @apply mt-2 text-2xl font-semibold tabular-nums text-white;
+  }
+
+  .tf-card-hint {
+    @apply mt-1 text-xs text-gray-400;
+  }
+
+  .tf-code {
+    @apply rounded bg-gray-950 px-1 py-0.5 text-xs text-primary-300 ring-1 ring-gray-800;
+  }
+
+  .tf-cta-panel {
+    @apply rounded-lg border border-primary-500/30 bg-primary-500/10 p-6;
+  }
+
+  .tf-processing-panel {
+    @apply space-y-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-5;
+  }
+
+  /* In-place sheet text editing (WYSIWYG) */
+  .photobook-text-slot[contenteditable="true"]:focus {
+    outline: none;
+  }
+
+  .tf-scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tf-scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

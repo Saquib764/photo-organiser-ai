@@ -1,0 +1,1617 @@
+[
+  {
+    "id": "wedding_back_cover",
+    "category": "wedding",
+    "name": "Back cover",
+    "description": "Circular couple portrait, script names, and a short thank-you message for the closing page.",
+    "page_role": "back",
+    "slots": [
+      {
+        "id": "portrait",
+        "label": "Portrait",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.25rem, 4vw, 2rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "thank_you",
+        "label": "Thank you",
+        "default_text": "Thank you for sharing our special day.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.06em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white closing sheet; calm and minimal",
+      "text_primary": "Dark warm brown script couple names",
+      "text_secondary": "Dark warm brown thank-you message; slightly lighter typographic weight",
+      "decorative": "Muted rose-tan hairline ring around the circular portrait"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col items-center justify-center gap-4 bg-white px-8 py-8",
+      "children": [
+        {
+          "type": "box",
+          "class": "aspect-square w-[46%] overflow-hidden rounded-full ring-2 ring-[#9b7b67]/30",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "portrait",
+              "placeholder": "Portrait",
+              "dimmed": true,
+              "borderRadius": "full"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "slotId": "couple_names",
+          "multiline": false,
+          "class": "text-center",
+          "when": "always"
+        },
+        {
+          "type": "text",
+          "slotId": "thank_you",
+          "multiline": true,
+          "class": "max-w-[85%] text-center leading-relaxed",
+          "when": "always"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_back_cover_ornate",
+    "category": "wedding",
+    "name": "Back cover (ornate)",
+    "description": "Closing page with ornamental side borders, arched couple portrait, script names, thank-you message, and date — bookend to the classic cover.",
+    "page_role": "back",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Couple portrait",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.25rem, 4vw, 2rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "thank_you",
+        "label": "Thank you",
+        "default_text": "Thank you for celebrating with us.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.06em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "closing_date",
+        "label": "Closing date",
+        "default_text": "SEPTEMBER 20, 2026",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.3em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean near-white closing sheet; bright and airy",
+      "text_primary": "Dark warm brown script couple names; strongest contrast on the page",
+      "text_secondary": "Dark warm brown thank-you and date; works at small uppercase sizes",
+      "accent": "Soft dusty blush bar along the bottom edge; subtle warmth, not dominant",
+      "decorative": "Muted rose-tan ornamental side borders and hairline dividers; low contrast, framing only"
+    },
+    "render": {
+      "type": "box",
+      "class": "relative flex h-full w-full flex-col bg-white px-8 py-5",
+      "children": [
+        {
+          "type": "ornament",
+          "variant": "wedding_side_borders"
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 shrink-0 px-4 pt-1 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 mx-auto mt-2 min-h-0 w-[52%] max-w-xs flex-1 overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Couple portrait",
+              "dimmed": false,
+              "borderRadius": "none"
+            }
+          ],
+          "imageFrame": "arch"
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 mt-2 shrink-0 space-y-2 px-6 text-center",
+          "children": [
+            {
+              "type": "divider"
+            },
+            {
+              "type": "text",
+              "slotId": "thank_you",
+              "multiline": true,
+              "class": "max-w-[90%] mx-auto leading-relaxed",
+              "when": "always"
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "text",
+              "slotId": "closing_date",
+              "multiline": false,
+              "when": "always"
+            }
+          ]
+        },
+        {
+          "type": "ornament",
+          "variant": "accent_bar"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_back_cover_boho",
+    "category": "wedding",
+    "name": "Back cover (boho)",
+    "description": "Editorial split closing page with overlapping rounded photos and script names with a thank-you message — bookend to the boho cover.",
+    "page_role": "back",
+    "slots": [
+      {
+        "id": "photo_primary",
+        "label": "Primary photo",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "photo_secondary",
+        "label": "Secondary photo",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "label",
+        "label": "Label",
+        "default_text": "WITH GRATITUDE",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.35em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      },
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.5rem, 5vw, 2.5rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "thank_you",
+        "label": "Thank you",
+        "default_text": "Thank you for sharing our joy and being part of our story.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.65rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Warm cream off-white closing sheet; airy editorial feel",
+      "text_primary": "Dark warm brown script couple names; strongest contrast on the page",
+      "text_secondary": "Dark warm brown small caps label and thank-you body",
+      "decorative": "Soft shadows on overlapping rounded photos; low contrast framing only"
+    },
+    "render": {
+      "type": "stack",
+      "direction": "row",
+      "class": "h-full w-full items-center gap-4 bg-[#faf6f0] px-5 py-6",
+      "children": [
+        {
+          "type": "box",
+          "class": "relative h-full min-h-0 w-[44%] shrink-0",
+          "children": [
+            {
+              "type": "box",
+              "class": "absolute left-0 top-[8%] z-0 aspect-[3/4] w-[72%] overflow-hidden rounded-[2rem] shadow-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "photo_primary",
+                  "placeholder": "Primary photo",
+                  "dimmed": false,
+                  "borderRadius": "none"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "absolute bottom-[8%] right-0 z-10 aspect-[3/4] w-[68%] overflow-hidden rounded-[2rem] shadow-md",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "photo_secondary",
+                  "placeholder": "Secondary photo",
+                  "dimmed": false,
+                  "borderRadius": "none"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "direction": "col",
+          "class": "flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-2 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "label",
+              "multiline": false,
+              "when": "always"
+            },
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "multiline": false,
+              "when": "if_text"
+            },
+            {
+              "type": "text",
+              "slotId": "thank_you",
+              "multiline": true,
+              "class": "max-w-[95%] leading-relaxed",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_back_cover_bleed",
+    "category": "wedding",
+    "name": "Back cover (full bleed)",
+    "description": "Edge-to-edge closing photo with a white footer band for script names and a thank-you message.",
+    "page_role": "back",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Closing photo",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.25rem, 4vw, 2rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "thank_you",
+        "label": "Thank you",
+        "default_text": "Thank you for sharing our special day.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.06em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Full-bleed photo; no separate sheet color",
+      "overlay": "Near-white footer band (~25% page height) for closing copy",
+      "text_primary": "Dark warm brown script couple names on the footer band",
+      "text_secondary": "Dark warm brown thank-you message on the footer band"
+    },
+    "render": {
+      "type": "box",
+      "class": "relative h-full w-full overflow-hidden",
+      "children": [
+        {
+          "type": "image",
+          "slotId": "hero",
+          "placeholder": "Closing photo",
+          "dimmed": false,
+          "borderRadius": "inherit"
+        },
+        {
+          "type": "box",
+          "class": "absolute inset-x-0 bottom-0 flex h-[26%] min-h-[5.5rem] flex-col items-center justify-center gap-2 bg-white/95 px-6 py-4 text-center shadow-[0_-4px_20px_rgba(0,0,0,0.08)]",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "multiline": false,
+              "when": "if_text"
+            },
+            {
+              "type": "text",
+              "slotId": "thank_you",
+              "multiline": true,
+              "class": "max-w-[92%] leading-relaxed",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_editorial_text",
+    "category": "wedding",
+    "name": "Editorial + text",
+    "description": "Large landscape photo on top, body copy in the middle, and a smaller landscape photo along the bottom.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "top_photo",
+        "label": "Top photo",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "bottom_photo",
+        "label": "Bottom photo",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "body",
+        "label": "Body text",
+        "default_text": "Surrounded by laughter and love, we celebrated each ritual and every quiet glance. These pages hold the joy of our families coming together.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.04em",
+        "default_text_align": "left",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet with generous margins around photos",
+      "text_primary": "Dark warm brown for script headings",
+      "text_secondary": "Dark warm brown for body copy; left-aligned, comfortable line length"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-3 bg-white px-5 py-5",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "top_photo",
+              "placeholder": "Top photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "slotId": "body",
+          "multiline": true,
+          "class": "shrink-0 px-1 leading-relaxed",
+          "when": "always"
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 flex-1 overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "bottom_photo",
+              "placeholder": "Bottom photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_full_bleed_badge",
+    "category": "wedding",
+    "name": "Full bleed + badge",
+    "description": "Edge-to-edge sunset or portrait with a circular script badge overlay near the bottom.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Full bleed",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "badge",
+        "label": "Badge text",
+        "default_text": "Forever Begins",
+        "color_hint": "Dark warm brown for short badge headline on a near-white circular overlay",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "0.9rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Full-bleed photo; no separate sheet color",
+      "overlay": "Near-white semi-opaque circular badge (~92% opacity) with soft shadow",
+      "text_primary": "Dark warm brown badge text; must read on the white badge, not on the photo"
+    },
+    "render": {
+      "type": "box",
+      "class": "relative h-full w-full overflow-hidden",
+      "children": [
+        {
+          "type": "image",
+          "slotId": "hero",
+          "placeholder": "Full bleed",
+          "dimmed": false,
+          "borderRadius": "inherit"
+        },
+        {
+          "type": "box",
+          "class": "absolute bottom-[12%] left-1/2 flex size-24 -translate-x-1/2 items-center justify-center rounded-full bg-white/92 px-3 text-center shadow-md",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "badge",
+              "multiline": false,
+              "class": "leading-tight",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_photo_mosaic",
+    "category": "wedding",
+    "name": "Eight-photo mosaic",
+    "description": "Dense middle-page collage: three portrait photos on top, two landscape photos in the middle row, and three portrait photos on the bottom — ideal for ceremony details and candid moments.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "t1",
+        "label": "t1",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "t2",
+        "label": "t2",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "t3",
+        "label": "t3",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "m1",
+        "label": "m1",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "m2",
+        "label": "m2",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "b1",
+        "label": "b1",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "b2",
+        "label": "b2",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "b3",
+        "label": "b3",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "gallery_title",
+        "label": "Gallery title",
+        "default_text": "Our Wedding Day",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1rem, 3.5vw, 1.5rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "footer_caption",
+        "label": "Footer caption",
+        "default_text": "Every detail, every smile, forever remembered.",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "text_primary": "Dark warm brown for script titles when present",
+      "text_secondary": "Dark warm brown for footer captions and labels"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col bg-white p-3 shadow-sm",
+      "children": [
+        {
+          "type": "box",
+          "class": "mb-2 shrink-0 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "gallery_title",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "mosaic",
+          "class": "grid min-h-0 flex-1 gap-[3px]",
+          "templateColumns": "repeat(6, 1fr)",
+          "templateRows": "2fr 1.15fr 2fr",
+          "gap": "3px",
+          "cells": [
+            {
+              "slotId": "t1",
+              "gridColumn": "1 / 3"
+            },
+            {
+              "slotId": "t2",
+              "gridColumn": "3 / 5"
+            },
+            {
+              "slotId": "t3",
+              "gridColumn": "5 / 7"
+            },
+            {
+              "slotId": "m1",
+              "gridColumn": "1 / 4"
+            },
+            {
+              "slotId": "m2",
+              "gridColumn": "4 / 7"
+            },
+            {
+              "slotId": "b1",
+              "gridColumn": "1 / 3"
+            },
+            {
+              "slotId": "b2",
+              "gridColumn": "3 / 5"
+            },
+            {
+              "slotId": "b3",
+              "gridColumn": "5 / 7"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "mt-2 shrink-0 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "footer_caption",
+              "when": "if_text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_center_mosaic_8",
+    "category": "wedding",
+    "name": "Eight-photo center mosaic",
+    "description": "Dense collage with script title and caption centered on the page, surrounded by eight photos in a 3×3 ring — ideal for ceremony montages with a focal headline.",
+    "page_role": "middle",
+    "slots": [
+      { "id": "tl", "label": "Top left", "aspect_hint": "portrait" },
+      { "id": "t", "label": "Top center", "aspect_hint": "portrait" },
+      { "id": "tr", "label": "Top right", "aspect_hint": "portrait" },
+      { "id": "l", "label": "Middle left", "aspect_hint": "portrait" },
+      { "id": "r", "label": "Middle right", "aspect_hint": "portrait" },
+      { "id": "bl", "label": "Bottom left", "aspect_hint": "portrait" },
+      { "id": "b", "label": "Bottom center", "aspect_hint": "portrait" },
+      { "id": "br", "label": "Bottom right", "aspect_hint": "portrait" }
+    ],
+    "text_slots": [
+      {
+        "id": "gallery_title",
+        "label": "Gallery title",
+        "default_text": "Our Wedding Day",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1rem, 3.2vw, 1.45rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "footer_caption",
+        "label": "Center caption",
+        "default_text": "Every detail, every smile, forever remembered.",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.55rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "content_surfaces": "White center typography well amid photo tiles; crisp contrast for script title and caption",
+      "text_primary": "Dark warm brown script title centered among photos",
+      "text_secondary": "Dark warm brown sans caption beneath title in the center well"
+    },
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] bg-white p-3 shadow-sm",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "tl", "placeholder": "tl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "t", "placeholder": "t", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "tr", "placeholder": "tr", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "l", "placeholder": "l", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "flex min-h-0 flex-col items-center justify-center gap-1.5 bg-white px-3 py-4 text-center shadow-sm ring-1 ring-black/5",
+          "children": [
+            { "type": "text", "slotId": "gallery_title", "when": "if_text" },
+            {
+              "type": "text",
+              "slotId": "footer_caption",
+              "multiline": true,
+              "class": "leading-snug",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "r", "placeholder": "r", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "bl", "placeholder": "bl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "b", "placeholder": "b", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "children": [{ "type": "image", "slotId": "br", "placeholder": "br", "dimmed": true, "borderRadius": "inherit" }]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_center_mosaic_6",
+    "category": "wedding",
+    "name": "Six-photo center mosaic",
+    "description": "Six photos framing a centered script title and caption — corner and side tiles with open top/bottom center for a lighter, airy montage.",
+    "page_role": "middle",
+    "slots": [
+      { "id": "tl", "label": "Top left", "aspect_hint": "portrait" },
+      { "id": "tr", "label": "Top right", "aspect_hint": "portrait" },
+      { "id": "l", "label": "Middle left", "aspect_hint": "portrait" },
+      { "id": "r", "label": "Middle right", "aspect_hint": "portrait" },
+      { "id": "bl", "label": "Bottom left", "aspect_hint": "portrait" },
+      { "id": "br", "label": "Bottom right", "aspect_hint": "portrait" }
+    ],
+    "text_slots": [
+      {
+        "id": "gallery_title",
+        "label": "Gallery title",
+        "default_text": "Forever & Always",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1rem, 3.2vw, 1.45rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "footer_caption",
+        "label": "Center caption",
+        "default_text": "A day we will never forget.",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.55rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "content_surfaces": "White center typography well amid photo tiles; crisp contrast for script title and caption",
+      "text_primary": "Dark warm brown script title centered among photos",
+      "text_secondary": "Dark warm brown sans caption beneath title in the center well"
+    },
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] bg-white p-3 shadow-sm",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "1", "gridRow": "1" },
+          "children": [{ "type": "image", "slotId": "tl", "placeholder": "tl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "3", "gridRow": "1" },
+          "children": [{ "type": "image", "slotId": "tr", "placeholder": "tr", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "1", "gridRow": "2" },
+          "children": [{ "type": "image", "slotId": "l", "placeholder": "l", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "flex min-h-0 flex-col items-center justify-center gap-1.5 bg-white px-3 py-4 text-center shadow-sm ring-1 ring-black/5",
+          "style": { "gridColumn": "2", "gridRow": "2" },
+          "children": [
+            { "type": "text", "slotId": "gallery_title", "when": "if_text" },
+            {
+              "type": "text",
+              "slotId": "footer_caption",
+              "multiline": true,
+              "class": "leading-snug",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "3", "gridRow": "2" },
+          "children": [{ "type": "image", "slotId": "r", "placeholder": "r", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "1", "gridRow": "3" },
+          "children": [{ "type": "image", "slotId": "bl", "placeholder": "bl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "3", "gridRow": "3" },
+          "children": [{ "type": "image", "slotId": "br", "placeholder": "br", "dimmed": true, "borderRadius": "inherit" }]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_center_mosaic_4",
+    "category": "wedding",
+    "name": "Four-photo center mosaic",
+    "description": "Four corner photos around a large centered script title and caption — spacious middle well for chapter headings or a short vow quote.",
+    "page_role": "middle",
+    "slots": [
+      { "id": "tl", "label": "Top left", "aspect_hint": "square" },
+      { "id": "tr", "label": "Top right", "aspect_hint": "square" },
+      { "id": "bl", "label": "Bottom left", "aspect_hint": "square" },
+      { "id": "br", "label": "Bottom right", "aspect_hint": "square" }
+    ],
+    "text_slots": [
+      {
+        "id": "gallery_title",
+        "label": "Gallery title",
+        "default_text": "Chapter Two",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.1rem, 3.5vw, 1.6rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "footer_caption",
+        "label": "Center caption",
+        "default_text": "Where our story continues.",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.1em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "content_surfaces": "White center typography well amid photo tiles; crisp contrast for script title and caption",
+      "text_primary": "Dark warm brown script title centered among photos",
+      "text_secondary": "Dark warm brown sans caption beneath title in the center well"
+    },
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] bg-white p-3 shadow-sm",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "1", "gridRow": "1" },
+          "children": [{ "type": "image", "slotId": "tl", "placeholder": "tl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "3", "gridRow": "1" },
+          "children": [{ "type": "image", "slotId": "tr", "placeholder": "tr", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "flex min-h-0 flex-col items-center justify-center gap-2 bg-white px-4 py-6 text-center shadow-sm ring-1 ring-black/5",
+          "style": { "gridColumn": "2", "gridRow": "2" },
+          "children": [
+            { "type": "text", "slotId": "gallery_title", "when": "if_text" },
+            {
+              "type": "text",
+              "slotId": "footer_caption",
+              "multiline": true,
+              "class": "leading-snug",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "1", "gridRow": "3" },
+          "children": [{ "type": "image", "slotId": "bl", "placeholder": "bl", "dimmed": true, "borderRadius": "inherit" }]
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 overflow-hidden",
+          "style": { "gridColumn": "3", "gridRow": "3" },
+          "children": [{ "type": "image", "slotId": "br", "placeholder": "br", "dimmed": true, "borderRadius": "inherit" }]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_quad_editorial",
+    "category": "wedding",
+    "name": "Four-photo grid",
+    "description": "2×2 grid of detail and candid shots with a centered circular script badge overlay.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "tl",
+        "label": "Top left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "tr",
+        "label": "Top right",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "bl",
+        "label": "Bottom left",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "br",
+        "label": "Bottom right",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "center_badge",
+        "label": "Center badge",
+        "default_text": "Forever Begins",
+        "color_hint": "Dark warm brown for short badge headline on a near-white circular overlay",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "0.9rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "overlay": "Near-white semi-opaque circular badge (~92% opacity) centered on the grid intersection",
+      "text_primary": "Dark warm brown script on the center badge; must read on white, not on photos"
+    },
+    "render": {
+      "type": "box",
+      "class": "relative h-full w-full bg-white p-3",
+      "children": [
+        {
+          "type": "grid",
+          "class": "grid h-full w-full grid-cols-2 grid-rows-2 gap-2",
+          "gap": 8,
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "tl",
+                  "placeholder": "tl",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "tr",
+                  "placeholder": "tr",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "bl",
+                  "placeholder": "bl",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "br",
+                  "placeholder": "br",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "pointer-events-none absolute left-1/2 top-1/2 z-10 flex aspect-square w-[32%] min-h-16 min-w-16 max-w-[8rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 px-3 text-center shadow-md ring-2 ring-[#9b7b67]/25",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "center_badge",
+              "multiline": true,
+              "class": "leading-tight",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_split_collage",
+    "category": "wedding",
+    "name": "Split collage spread",
+    "description": "Two-column middle spread: left has three detail photos, script heading, and a wide couple portrait; right has a tall group photo, caption line, and two bottom candids.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "lt1",
+        "label": "Left top 1",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "lt2",
+        "label": "Left top 2",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "lt3",
+        "label": "Left top 3",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "lb",
+        "label": "Left bottom",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "rt",
+        "label": "Right top",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "rb_left",
+        "label": "Right bottom left",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "rb_right",
+        "label": "Right bottom right",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "heading",
+        "label": "Script heading",
+        "default_text": "Our Forever Begins",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.1rem, 3.5vw, 1.75rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "subtext",
+        "label": "Caption line",
+        "default_text": "A celebration of love, captured in timeless moments",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Courier Prime', monospace",
+        "default_font_size": "0.55rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.18em",
+        "default_text_align": "center",
+        "default_text_transform": "lowercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral gallery feel",
+      "text_primary": "Dark warm brown for script titles when present",
+      "text_secondary": "Dark warm brown for footer captions and labels"
+    },
+    "render": {
+      "type": "grid",
+      "class": "grid h-full w-full grid-cols-2 gap-[3px] bg-white p-3",
+      "children": [
+        {
+          "type": "stack",
+          "class": "flex min-h-0 flex-col gap-[3px]",
+          "children": [
+            {
+              "type": "grid",
+              "class": "grid min-h-0 flex-[0.85] grid-cols-3 gap-[3px]",
+              "children": [
+                {
+                  "type": "box",
+                  "class": "min-h-0 overflow-hidden",
+                  "children": [
+                    {
+                      "type": "image",
+                      "slotId": "lt1",
+                      "placeholder": "lt1",
+                      "dimmed": true,
+                      "borderRadius": "inherit"
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "class": "min-h-0 overflow-hidden",
+                  "children": [
+                    {
+                      "type": "image",
+                      "slotId": "lt2",
+                      "placeholder": "lt2",
+                      "dimmed": true,
+                      "borderRadius": "inherit"
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "class": "min-h-0 overflow-hidden",
+                  "children": [
+                    {
+                      "type": "image",
+                      "slotId": "lt3",
+                      "placeholder": "lt3",
+                      "dimmed": true,
+                      "borderRadius": "inherit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "shrink-0 px-2 py-2 text-center",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "heading",
+                  "when": "if_text"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "min-h-0 flex-[1.35] overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "lb",
+                  "placeholder": "lb",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "class": "flex min-h-0 flex-col gap-[3px]",
+          "children": [
+            {
+              "type": "box",
+              "class": "min-h-0 flex-[1.55] overflow-hidden",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "rt",
+                  "placeholder": "rt",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "shrink-0 px-2 py-1.5 text-center",
+              "children": [
+                {
+                  "type": "text",
+                  "slotId": "subtext",
+                  "when": "if_text"
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "class": "grid min-h-0 flex-1 grid-cols-[0.9fr_1.35fr] gap-[3px]",
+              "children": [
+                {
+                  "type": "box",
+                  "class": "min-h-0 overflow-hidden",
+                  "children": [
+                    {
+                      "type": "image",
+                      "slotId": "rb_left",
+                      "placeholder": "rb_left",
+                      "dimmed": true,
+                      "borderRadius": "inherit"
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "class": "min-h-0 overflow-hidden",
+                  "children": [
+                    {
+                      "type": "image",
+                      "slotId": "rb_right",
+                      "placeholder": "rb_right",
+                      "dimmed": true,
+                      "borderRadius": "inherit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "gap": "3px"
+    }
+  },
+  {
+    "id": "wedding_story_left",
+    "category": "wedding",
+    "name": "Love story (left)",
+    "description": "Chapter page with script heading, arched caption area, and a landscape photo along the bottom — ideal for opening a chapter spread.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "bottom_photo",
+        "label": "Bottom photo",
+        "aspect_hint": "landscape"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "heading",
+        "label": "Heading",
+        "default_text": "A Love Story Unfolding",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.25rem, 4vw, 2rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "caption",
+        "label": "Caption",
+        "default_text": "Every moment led us here.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.75rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.08em",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Soft blush pink sheet; warm and romantic, lighter than accent tones",
+      "content_surfaces": "White arch/caption well; crisp contrast for centered copy",
+      "text_primary": "Dark warm brown script heading on blush background",
+      "text_secondary": "Dark warm brown sans caption inside the white arch"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col px-6 py-5",
+      "children": [
+        {
+          "type": "box",
+          "class": "shrink-0 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "heading",
+              "when": "if_text"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "mx-auto mt-4 flex min-h-0 w-[78%] flex-1 flex-col items-center justify-center rounded-t-[50%] bg-white px-5 py-6 shadow-sm",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "caption",
+              "multiline": false,
+              "class": "text-center leading-relaxed",
+              "when": "always"
+            }
+          ],
+          "style": {
+            "borderRadius": "50% 50% 0 0 / 35% 35% 0 0"
+          }
+        },
+        {
+          "type": "box",
+          "class": "mt-3 h-[38%] min-h-0 shrink-0 overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "bottom_photo",
+              "placeholder": "Bottom photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        }
+      ],
+      "themeBackground": "blush"
+    }
+  },
+  {
+    "id": "wedding_story_right",
+    "category": "wedding",
+    "name": "Love story (right)",
+    "description": "Large detail photo on top, square couple portrait in the middle, and script names at the bottom.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "top_photo",
+        "label": "Top photo",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "center_photo",
+        "label": "Center photo",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.25rem, 4vw, 2rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet; neutral so photos carry color",
+      "text_primary": "Dark warm brown script couple names at the foot of the page"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-3 bg-white px-5 py-5",
+      "children": [
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "top_photo",
+              "placeholder": "Top photo",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "mx-auto aspect-square w-[42%] min-h-0 overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "center_photo",
+              "placeholder": "Center",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "shrink-0 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "when": "if_text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_text_collage",
+    "category": "wedding",
+    "name": "Text + collage",
+    "description": "Body copy at the top with one large horizontal photo and two smaller square detail shots below.",
+    "page_role": "middle",
+    "slots": [
+      {
+        "id": "main",
+        "label": "Main photo",
+        "aspect_hint": "landscape"
+      },
+      {
+        "id": "left_small",
+        "label": "Left detail",
+        "aspect_hint": "square"
+      },
+      {
+        "id": "right_small",
+        "label": "Right detail",
+        "aspect_hint": "square"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "body",
+        "label": "Body text",
+        "default_text": "From the first look to the last dance, we cherished every detail — the flowers, the vows, and the hands we held.",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.04em",
+        "default_text_align": "left",
+        "default_text_transform": "none"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean white sheet with generous margins around photos",
+      "text_primary": "Dark warm brown for script headings",
+      "text_secondary": "Dark warm brown for body copy; left-aligned, comfortable line length"
+    },
+    "render": {
+      "type": "stack",
+      "class": "flex h-full w-full flex-col gap-3 bg-white px-5 py-5",
+      "children": [
+        {
+          "type": "text",
+          "slotId": "body",
+          "multiline": true,
+          "class": "shrink-0 px-1 leading-relaxed",
+          "when": "always"
+        },
+        {
+          "type": "box",
+          "class": "min-h-0 flex-[2] overflow-hidden rounded-sm",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "main",
+              "placeholder": "Main",
+              "dimmed": true,
+              "borderRadius": "inherit"
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "class": "grid min-h-0 flex-1 grid-cols-2 gap-2",
+          "children": [
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "left_small",
+                  "placeholder": "left_small",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "overflow-hidden rounded-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "right_small",
+                  "placeholder": "right_small",
+                  "dimmed": true,
+                  "borderRadius": "inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

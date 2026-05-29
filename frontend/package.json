@@ -1,0 +1,22 @@
+{
+  "name": "photo-organiser",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --port 80 --public",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview --port 80 --public",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "4.3.0",
+    "nuxt": "^4.4.6"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "1.12.1",
+    "@types/node": "^25.9.1",
+    "eslint": "^9.0.0"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+}

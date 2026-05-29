@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# Workspace photo data (see workspace/README.md; path overridable via WORKSPACE_ROOT)
+workspace/raw/
+workspace/processed_small/
+workspace/pipeline_state.json
+workspace/image_metadata.json
+workspace/openai_config.json
+
+# Env
+.env
+.env.local
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/

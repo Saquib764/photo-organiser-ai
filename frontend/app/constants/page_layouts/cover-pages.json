@@ -1,0 +1,253 @@
+[
+  {
+    "id": "wedding_cover",
+    "category": "cover",
+    "name": "Wedding cover",
+    "description": "Front cover with ornamental side borders, script couple names, arched hero portrait, date, and tagline.",
+    "page_role": "cover",
+    "slots": [
+      {
+        "id": "hero",
+        "label": "Couple portrait",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy and Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.5rem, 5vw, 2.75rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "wedding_date",
+        "label": "Wedding date",
+        "default_text": "SEPTEMBER 20, 2026",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.65rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.35em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      },
+      {
+        "id": "tagline",
+        "label": "Tagline",
+        "default_text": "A LOVE THAT LASTS FOREVER",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.7rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.2em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Clean near-white sheet; bright and airy so photos and typography stand out",
+      "text_primary": "Dark warm brown for script couple names; strongest contrast on the page",
+      "text_secondary": "Dark warm brown for date and tagline; works at small uppercase sizes",
+      "accent": "Soft dusty blush bar along the bottom edge; subtle warmth, not dominant",
+      "decorative": "Muted rose-tan ornamental side borders and hairline dividers; low contrast, framing only"
+    },
+    "render": {
+      "type": "box",
+      "class": "relative flex h-full w-full flex-col bg-white px-8 py-6",
+      "children": [
+        {
+          "type": "ornament",
+          "variant": "wedding_side_borders"
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 shrink-0 px-4 pt-2 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "when": "always"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 mx-auto mt-3 min-h-0 w-[58%] max-w-xs flex-1 overflow-hidden",
+          "children": [
+            {
+              "type": "image",
+              "slotId": "hero",
+              "placeholder": "Couple portrait",
+              "dimmed": false,
+              "borderRadius": "none"
+            }
+          ],
+          "imageFrame": "arch"
+        },
+        {
+          "type": "box",
+          "class": "relative z-10 mt-3 shrink-0 space-y-2 px-6 text-center",
+          "children": [
+            {
+              "type": "divider"
+            },
+            {
+              "type": "text",
+              "slotId": "wedding_date",
+              "multiline": false,
+              "when": "always"
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "text",
+              "slotId": "tagline",
+              "multiline": false,
+              "class": "mt-1",
+              "when": "always"
+            }
+          ]
+        },
+        {
+          "type": "ornament",
+          "variant": "accent_bar"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wedding_boho_cover",
+    "category": "cover",
+    "name": "Wedding boho cover",
+    "description": "Editorial split cover with overlapping rounded photos on the left and script couple names with labels on the right. No navigation chrome.",
+    "page_role": "cover",
+    "slots": [
+      {
+        "id": "photo_primary",
+        "label": "Primary photo",
+        "aspect_hint": "portrait"
+      },
+      {
+        "id": "photo_secondary",
+        "label": "Secondary photo",
+        "aspect_hint": "portrait"
+      }
+    ],
+    "text_slots": [
+      {
+        "id": "heading",
+        "label": "Heading",
+        "default_text": "THE WEDDING OF",
+        "color_hint": "Dark warm brown for small sans-serif labels (dates, taglines); same hue family as display text",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.4em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      },
+      {
+        "id": "couple_names",
+        "label": "Couple names",
+        "default_text": "Groomy & Bridey",
+        "color_hint": "Dark warm brown for script display names and titles; high contrast on light backgrounds",
+        "default_font_family": "'Great Vibes', cursive",
+        "default_font_size": "clamp(1.75rem, 6vw, 3.25rem)",
+        "default_font_weight": "400",
+        "default_letter_spacing": "normal",
+        "default_text_align": "center",
+        "default_text_transform": "none"
+      },
+      {
+        "id": "subtitle",
+        "label": "Subtitle",
+        "default_text": "A CELEBRATION OF LOVE AND JOY",
+        "color_hint": "Dark warm brown for body copy and captions; readable at small sizes on white or blush",
+        "default_font_family": "'Montserrat', sans-serif",
+        "default_font_size": "0.6rem",
+        "default_font_weight": "400",
+        "default_letter_spacing": "0.12em",
+        "default_text_align": "center",
+        "default_text_transform": "uppercase"
+      }
+    ],
+    "color_guidance": {
+      "page_background": "Warm cream off-white sheet; airy editorial feel",
+      "text_primary": "Dark warm brown for script couple names; strongest contrast on the page",
+      "text_secondary": "Dark warm brown for small caps heading and subtitle",
+      "decorative": "Muted rose-tan botanical line art in corners when present; low contrast framing only"
+    },
+    "render": {
+      "type": "stack",
+      "direction": "row",
+      "class": "h-full w-full items-center gap-5 bg-[#faf6f0] px-5 py-7",
+      "children": [
+        {
+          "type": "box",
+          "class": "relative h-full min-h-0 w-[46%] shrink-0",
+          "children": [
+            {
+              "type": "box",
+              "class": "absolute left-0 top-[6%] z-0 aspect-[3/4] w-[74%] overflow-hidden rounded-[2rem] shadow-sm",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "photo_primary",
+                  "placeholder": "Primary photo",
+                  "dimmed": false,
+                  "borderRadius": "none"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "class": "absolute bottom-[6%] right-0 z-10 aspect-[3/4] w-[70%] overflow-hidden rounded-[2rem] shadow-md",
+              "children": [
+                {
+                  "type": "image",
+                  "slotId": "photo_secondary",
+                  "placeholder": "Secondary photo",
+                  "dimmed": false,
+                  "borderRadius": "none"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "stack",
+          "direction": "col",
+          "class": "flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-3 text-center",
+          "children": [
+            {
+              "type": "text",
+              "slotId": "heading",
+              "multiline": false,
+              "when": "always"
+            },
+            {
+              "type": "text",
+              "slotId": "couple_names",
+              "multiline": false,
+              "when": "always"
+            },
+            {
+              "type": "text",
+              "slotId": "subtitle",
+              "multiline": true,
+              "class": "max-w-[92%] leading-relaxed",
+              "when": "always"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
