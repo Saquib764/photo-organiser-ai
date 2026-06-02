@@ -383,6 +383,10 @@ class PhotobookPageCreateRequest(BaseModel):
     narrative: str = ""
 
 
+class PhotobookReorderPagesRequest(BaseModel):
+    page_ids: list[str] = Field(min_length=1)
+
+
 class PhotobookPagePatchRequest(BaseModel):
     title: str | None = None
     narrative: str | None = None

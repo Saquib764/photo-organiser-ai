@@ -16,6 +16,8 @@ const {
   clearSession,
   sendChatMessage,
   addPage,
+  reorderPages,
+  shufflePages,
   removePage,
   composePage,
   composeAll,
@@ -41,9 +43,20 @@ const layoutSlotIds = computed(() => {
   return getPageLayout(layoutId)?.slots.map(s => s.id) ?? []
 })
 
-watch(activePage, () => {
-  focusedSlotId.value = layoutSlotIds.value[0] ?? null
-})
+watch(
+  [activePageId, layoutSlotIds],
+  () => {
+    const ids = layoutSlotIds.value
+    if (!ids.length) {
+      focusedSlotId.value = null
+      return
+    }
+    if (!focusedSlotId.value || !ids.includes(focusedSlotId.value)) {
+      focusedSlotId.value = ids[0] ?? null
+    }
+  },
+  { immediate: true },
+)
 
 function onAssignExtra(path: string) {
   if (activePageId.value && focusedSlotId.value) {
@@ -122,6 +135,8 @@ function startSlideshow() {
           :can-compose-all="canComposeAll"
           @add-page="addPage()"
           @delete-page="removePage"
+          @reorder-pages="reorderPages"
+          @shuffle-pages="shufflePages"
           @compose-page="activePage && composePage(activePage.id)"
           @compose-all="composeAll()"
         />

@@ -180,6 +180,62 @@ export function usePhotobook() {
     }
   }
 
+  function applyPageOrder(pageIds: string[]) {
+    if (!document.value) {
+      return
+    }
+    const byId = Object.fromEntries(document.value.pages.map(page => [page.id, page]))
+    document.value.pages = pageIds
+      .map(id => byId[id])
+      .filter((page): page is PhotobookPage => Boolean(page))
+  }
+
+  async function reorderPages(pageIds: string[]) {
+    if (!document.value || pageIds.length < 2) {
+      return
+    }
+
+    const currentIds = document.value.pages.map(page => page.id)
+    if (
+      pageIds.length !== currentIds.length
+      || pageIds.every((id, index) => id === currentIds[index])
+    ) {
+      return
+    }
+
+    applyPageOrder(pageIds)
+    error.value = null
+    try {
+      const data = await $fetch<PhotobookResponse>(
+        `${apiBase}/api/v1/photobook/pages/order`,
+        { method: 'PUT', body: { page_ids: pageIds } },
+      )
+      applyResponse(data)
+    }
+    catch (e) {
+      error.value = fetchErrorMessage(e, 'Failed to reorder pages')
+      await fetchPhotobook()
+    }
+  }
+
+  function shufflePages() {
+    const ids = pages.value.map(page => page.id)
+    if (ids.length < 2) {
+      return
+    }
+    const shuffled = [...ids]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const tmp = shuffled[i]!
+      shuffled[i] = shuffled[j]!
+      shuffled[j] = tmp
+    }
+    if (shuffled.every((id, index) => id === ids[index])) {
+      shuffled.push(shuffled.shift()!)
+    }
+    void reorderPages(shuffled)
+  }
+
   async function removePage(pageId: string) {
     if (pages.value.length <= 1) {
       return
@@ -351,6 +407,8 @@ export function usePhotobook() {
     clearSession,
     sendChatMessage,
     addPage,
+    reorderPages,
+    shufflePages,
     removePage,
     composePage,
     composeAll,

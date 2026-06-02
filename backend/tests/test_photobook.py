@@ -27,6 +27,7 @@ from app.page_layouts import (
     validate_slots,
 )
 from app.services.photobook_store import (
+    add_page,
     append_chat_message,
     apply_plan,
     clear_chat,
@@ -35,6 +36,7 @@ from app.services.photobook_store import (
     load_photobook,
     merge_page_extra_images,
     remove_page,
+    reorder_pages,
     reset_photobook_session,
     save_photobook,
 )
@@ -419,6 +421,32 @@ def test_cannot_remove_last_page(workspace: Path) -> None:
     page_id = doc.pages[0].id
     assert remove_page(doc, page_id) is False
     assert len(doc.pages) == 1
+
+
+def test_reorder_pages(workspace: Path) -> None:
+    doc = default_document()
+    page_one = doc.pages[0].id
+    page_two = add_page(doc, title="Page 2").id
+    assert reorder_pages(doc, [page_two, page_one])
+    assert [page.id for page in doc.pages] == [page_two, page_one]
+    assert reorder_pages(doc, [page_one]) is False
+    assert reorder_pages(doc, ["missing", page_two]) is False
+
+
+def test_put_photobook_pages_order_api(workspace: Path) -> None:
+    client = TestClient(app)
+    client.post("/api/v1/photobook/pages", json={"title": "Page 2"})
+    pages = client.get("/api/v1/photobook").json()["document"]["pages"]
+    assert len(pages) == 2
+    reversed_ids = [pages[1]["id"], pages[0]["id"]]
+
+    resp = client.put("/api/v1/photobook/pages/order", json={"page_ids": reversed_ids})
+    assert resp.status_code == 200
+    ordered = resp.json()["document"]["pages"]
+    assert [page["id"] for page in ordered] == reversed_ids
+
+    bad = client.put("/api/v1/photobook/pages/order", json={"page_ids": [pages[0]["id"]]})
+    assert bad.status_code == 400
 
 
 def test_get_photobook_api(workspace: Path) -> None:

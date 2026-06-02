@@ -223,3 +223,15 @@ def remove_page(document: PhotobookDocument, page_id: str) -> bool:
         return False
     document.pages = [p for p in document.pages if p.id != page_id]
     return True
+
+
+def reorder_pages(document: PhotobookDocument, page_ids: list[str]) -> bool:
+    """Reorder pages to match ``page_ids`` exactly (same ids, no duplicates)."""
+    existing_ids = [page.id for page in document.pages]
+    if len(page_ids) != len(existing_ids):
+        return False
+    if set(page_ids) != set(existing_ids):
+        return False
+    by_id = {page.id: page for page in document.pages}
+    document.pages = [by_id[page_id] for page_id in page_ids]
+    return True

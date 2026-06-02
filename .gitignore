@@ -16,9 +16,7 @@ dist/
 # Workspace photo data (see workspace/README.md; path overridable via WORKSPACE_ROOT)
 workspace/raw/
 workspace/processed_small/
-workspace/pipeline_state.json
-workspace/image_metadata.json
-workspace/openai_config.json
+workspace/*.json
 
 # Env
 .env

@@ -15,6 +15,7 @@ from app.schemas.photobook import (
     PhotobookDocument,
     PhotobookPageCreateRequest,
     PhotobookPagePatchRequest,
+    PhotobookReorderPagesRequest,
     PageComposeResult,
     PhotobookResponse,
 )
@@ -52,6 +53,7 @@ from app.services.photobook_store import (
     get_page,
     load_photobook,
     remove_page,
+    reorder_pages,
     save_photobook,
 )
 
@@ -164,6 +166,17 @@ async def post_photobook_page(body: PhotobookPageCreateRequest) -> PhotobookResp
     add_page(document, title=body.title, narrative=body.narrative)
     save_photobook(settings.workspace_root, document)
     return _photobook_response(document)
+
+
+@router.put("/photobook/pages/order", response_model=PhotobookResponse)
+async def put_photobook_pages_order(body: PhotobookReorderPagesRequest) -> PhotobookResponse:
+    document = load_photobook(settings.workspace_root)
+    if not reorder_pages(document, body.page_ids):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="page_ids must list every page exactly once",
+        )
+    return _save_photobook(document)
 
 
 @router.patch("/photobook/pages/{page_id}", response_model=PhotobookResponse)

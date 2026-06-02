@@ -15,9 +15,15 @@ const emit = defineEmits<{
   'delete-page': [pageId: string]
   'compose-page': []
   'compose-all': []
+  'reorder-pages': [pageIds: string[]]
+  'shuffle-pages': []
 }>()
 
 const canDeletePage = computed(() => pages.length > 1)
+const canReorder = computed(() => pages.length > 1)
+
+const draggingPageId = ref<string | null>(null)
+const dropTargetPageId = ref<string | null>(null)
 
 function pageLabel(page: PhotobookPage, index: number) {
   return page.title || `Page ${index + 1}`
@@ -35,6 +41,49 @@ function statusIcon(page: PhotobookPage) {
   }
   return null
 }
+
+function onDragStart(pageId: string, event: DragEvent) {
+  if (!canReorder.value) {
+    return
+  }
+  draggingPageId.value = pageId
+  dropTargetPageId.value = pageId
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', pageId)
+  }
+}
+
+function onDragOver(pageId: string) {
+  if (!draggingPageId.value || draggingPageId.value === pageId) {
+    return
+  }
+  dropTargetPageId.value = pageId
+}
+
+function onDrop(targetPageId: string) {
+  const dragId = draggingPageId.value
+  if (!dragId || dragId === targetPageId) {
+    return
+  }
+
+  const ids = pages.map(page => page.id)
+  const from = ids.indexOf(dragId)
+  const to = ids.indexOf(targetPageId)
+  if (from < 0 || to < 0) {
+    return
+  }
+
+  const next = [...ids]
+  next.splice(from, 1)
+  next.splice(to, 0, dragId)
+  emit('reorder-pages', next)
+}
+
+function onDragEnd() {
+  draggingPageId.value = null
+  dropTargetPageId.value = null
+}
 </script>
 
 <template>
@@ -50,16 +99,37 @@ function statusIcon(page: PhotobookPage) {
           aria-hidden="true"
         />
         <div
-          class="group/tab flex shrink-0 items-center gap-0.5 pr-1.5"
-          :class="
+          class="group/tab flex shrink-0 items-center gap-0.5 pr-1.5 transition"
+          :class="[
             activePageId === page.id
               ? 'bg-gray-900/80 text-white'
-              : 'text-gray-500 hover:bg-gray-900/40 hover:text-gray-300'
-          "
+              : 'text-gray-500 hover:bg-gray-900/40 hover:text-gray-300',
+            draggingPageId === page.id ? 'opacity-40' : '',
+            dropTargetPageId === page.id && draggingPageId && draggingPageId !== page.id
+              ? 'ring-1 ring-inset ring-primary-500/60'
+              : '',
+          ]"
+          @dragover.prevent="onDragOver(page.id)"
+          @drop.prevent="onDrop(page.id)"
         >
           <button
+            v-if="canReorder"
             type="button"
-            class="flex items-center gap-1.5 py-2.5 pl-4 pr-1 text-xs font-medium whitespace-nowrap transition"
+            class="ml-1 flex size-6 shrink-0 cursor-grab items-center justify-center rounded text-gray-600 transition hover:bg-gray-800/80 hover:text-gray-300 active:cursor-grabbing"
+            :aria-label="`Drag ${pageLabel(page, index)}`"
+            draggable="true"
+            @dragstart="onDragStart(page.id, $event)"
+            @dragend="onDragEnd"
+            @click.stop
+          >
+            <UIcon
+              name="i-heroicons-bars-3"
+              class="size-3.5"
+            />
+          </button>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 py-2.5 pl-2 pr-1 text-xs font-medium whitespace-nowrap transition"
             @click="activePageId = page.id"
           >
             <UIcon
@@ -94,6 +164,17 @@ function statusIcon(page: PhotobookPage) {
     <div
       class="flex shrink-0 items-center gap-2 border-l border-gray-800 bg-gray-950/50 px-3 py-1.5"
     >
+      <UButton
+        v-if="canReorder"
+        size="xs"
+        variant="ghost"
+        color="neutral"
+        icon="i-heroicons-arrows-right-left"
+        title="Shuffle page order"
+        @click="emit('shuffle-pages')"
+      >
+        Shuffle
+      </UButton>
       <UButton
         size="xs"
         variant="ghost"
