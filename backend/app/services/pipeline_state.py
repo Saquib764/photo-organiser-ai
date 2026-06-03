@@ -24,6 +24,7 @@ from app.services.image_categoriser import (
     is_categorisation_complete,
     load_categories_document,
 )
+from app.services.face_extraction import is_face_extraction_complete
 from app.services.image_processing import RawScan, ResizeProgress, is_resize_complete, scan_raw
 from app.services.workspace import RAW_DIR_NAME, count_raw_subfolders
 
@@ -103,6 +104,10 @@ def compute_library_flags(
     if metadata is None:
         metadata = load_metadata_document(workspace_root)
     has_analysed_color = resize_complete and is_palette_extraction_complete(metadata)
+    people_extraction_complete = resize_complete and is_face_extraction_complete(
+        workspace_root,
+        metadata,
+    )
     image_analysis_complete = resize_complete and is_metadata_analysis_complete(
         metadata,
     )
@@ -116,6 +121,7 @@ def compute_library_flags(
     return LibraryFlags(
         image_found=image_found,
         resize_complete=resize_complete,
+        people_extraction_complete=people_extraction_complete,
         has_analysed_color=has_analysed_color,
         image_analysis_complete=image_analysis_complete,
         categorisation_complete=categorisation_complete,
@@ -138,6 +144,12 @@ def _apply_flags_to_document(
             document.processing.categorisation_completed_at = datetime.now(UTC)
     else:
         document.processing.categorisation_completed_at = None
+
+    if flags.people_extraction_complete:
+        if document.processing.face_extraction_completed_at is None:
+            document.processing.face_extraction_completed_at = datetime.now(UTC)
+    else:
+        document.processing.face_extraction_completed_at = None
 
     document.flags = flags
     save_state_document(workspace_root, document)

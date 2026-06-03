@@ -4,6 +4,7 @@ import type { LibraryFlags } from '~/types/workspace'
 const EMPTY_FLAGS: LibraryFlags = {
   image_found: false,
   resize_complete: false,
+  people_extraction_complete: false,
   has_analysed_color: false,
   image_analysis_complete: false,
   categorisation_complete: false,
@@ -16,6 +17,8 @@ export function useWorkspaceStatusDisplay() {
     requestStatus,
     startProcessing,
     startPaletteExtraction,
+    startFaceExtraction,
+    rerunFaceExtraction,
     startAnalysis,
     rerunAnalysis,
     startCategorisation,
@@ -92,6 +95,14 @@ export function useWorkspaceStatusDisplay() {
     () => flags.value.resize_complete && !processingBusy.value,
   )
 
+  const canStartFaceExtraction = computed(
+    () => flags.value.resize_complete && !processingBusy.value,
+  )
+
+  const isFacePhase = computed(
+    () => processingPhase.value === 'faces',
+  )
+
   const isPalettePhase = computed(
     () => processingPhase.value === 'palette',
   )
@@ -124,6 +135,11 @@ export function useWorkspaceStatusDisplay() {
     () => status.value?.palette_completed_count ?? 0,
   )
   const paletteTotalCount = computed(() => status.value?.palette_total_count ?? 0)
+  const faceCompletedCount = computed(
+    () => status.value?.face_completed_count ?? 0,
+  )
+  const faceTotalCount = computed(() => status.value?.face_total_count ?? 0)
+  const personsCount = computed(() => status.value?.persons_count ?? 0)
   const analysisCompletedCount = computed(
     () => status.value?.analysis_completed_count ?? 0,
   )
@@ -148,6 +164,9 @@ export function useWorkspaceStatusDisplay() {
     if (isResizePhase.value) {
       return stepProgressPercent(resizeCompletedCount.value, resizeTotalCount.value)
     }
+    if (isFacePhase.value) {
+      return stepProgressPercent(faceCompletedCount.value, faceTotalCount.value)
+    }
     if (isPalettePhase.value) {
       return stepProgressPercent(paletteCompletedCount.value, paletteTotalCount.value)
     }
@@ -171,6 +190,13 @@ export function useWorkspaceStatusDisplay() {
       isResizePhase.value
       && processingBusy.value
       && resizeTotalCount.value > 0,
+  )
+
+  const showFaceProgress = computed(
+    () =>
+      isFacePhase.value
+      && processingBusy.value
+      && faceTotalCount.value > 0,
   )
 
   const showPaletteProgress = computed(
@@ -198,6 +224,18 @@ export function useWorkspaceStatusDisplay() {
     formatImageCount(resizeCompletedCount.value, resizeTotalCount.value),
   )
 
+  const faceCountText = computed(() =>
+    formatImageCount(faceCompletedCount.value, faceTotalCount.value),
+  )
+
+  const personsCountText = computed(() => {
+    const n = personsCount.value
+    if (n === 0) {
+      return null
+    }
+    return `${n.toLocaleString()} ${n === 1 ? 'person' : 'people'}`
+  })
+
   const paletteCountText = computed(() =>
     formatImageCount(paletteCompletedCount.value, paletteTotalCount.value),
   )
@@ -214,6 +252,7 @@ export function useWorkspaceStatusDisplay() {
   )
 
   const resizeProgressDetailText = resizeCountText
+  const faceProgressDetailText = faceCountText
   const paletteProgressDetailText = paletteCountText
   const analysisProgressDetailText = analysisCountText
   const categorisationProgressDetailText = categorisationCountText
@@ -235,6 +274,43 @@ export function useWorkspaceStatusDisplay() {
 
   const categoriesAvailable = computed(
     () => (status.value?.categories_count ?? 0) > 0,
+  )
+
+  const peopleAvailable = computed(
+    () => flags.value.people_extraction_complete,
+  )
+
+  const showStartFaceExtraction = computed(
+    () =>
+      canStartFaceExtraction.value
+      && !processingBusy.value
+      && faceCompletedCount.value === 0,
+  )
+
+  const showResumeFaceExtraction = computed(
+    () =>
+      canStartFaceExtraction.value
+      && !processingBusy.value
+      && faceCompletedCount.value > 0
+      && faceCompletedCount.value < faceTotalCount.value,
+  )
+
+  const showRerunFaceExtraction = computed(
+    () =>
+      canStartFaceExtraction.value
+      && !processingBusy.value
+      && faceCompletedCount.value > 0,
+  )
+
+  const showFaceExtractionActions = computed(
+    () =>
+      canStartFaceExtraction.value
+      && !processingBusy.value
+      && (
+        showStartFaceExtraction.value
+        || showResumeFaceExtraction.value
+        || showRerunFaceExtraction.value
+      ),
   )
 
   const analysisPrerequisitesMet = computed(
@@ -406,16 +482,25 @@ export function useWorkspaceStatusDisplay() {
     actionsDisabled,
     canStartProcessing,
     canStartPalette,
+    canStartFaceExtraction,
+    isFacePhase,
     isPalettePhase,
     isAnalysisPhase,
     isCategorisationPhase,
     isResizePhase,
     showResizeProgress,
+    showFaceProgress,
     showPaletteProgress,
     showAnalysisProgress,
     showCategorisationProgress,
     resizeCompletedCount,
     resizeTotalCount,
+    faceCompletedCount,
+    faceTotalCount,
+    faceCountText,
+    personsCount,
+    personsCountText,
+    faceProgressDetailText,
     paletteCompletedCount,
     paletteTotalCount,
     resizeCountText,
@@ -431,6 +516,11 @@ export function useWorkspaceStatusDisplay() {
     analysisTotalCount,
     analysisSummary,
     openaiConfigured,
+    peopleAvailable,
+    showStartFaceExtraction,
+    showResumeFaceExtraction,
+    showRerunFaceExtraction,
+    showFaceExtractionActions,
     showAnalysisOpenAiHint,
     openSettingsTab,
     captionsAvailable,
@@ -449,6 +539,8 @@ export function useWorkspaceStatusDisplay() {
     requestStatus,
     startProcessing,
     startPaletteExtraction,
+    startFaceExtraction,
+    rerunFaceExtraction,
     startAnalysis,
     rerunAnalysis,
     startCategorisation,

@@ -11,8 +11,10 @@ from app.config import settings
 from app.services.pipeline_runner import (
     handle_rerun_analysis,
     handle_rerun_categorisation,
+    handle_rerun_face_extraction,
     handle_start_analysis,
     handle_start_categorisation,
+    handle_start_face_extraction,
     handle_start_palette_extraction,
     handle_start_processing,
 )
@@ -147,6 +149,12 @@ async def workspace_status_ws(websocket: WebSocket) -> None:
                 elif msg_type == "start_processing":
                     await handle_start_processing(settings.workspace_root)
                     await send_status(websocket, reason="after_start_processing")
+                elif msg_type == "start_face_extraction":
+                    await handle_start_face_extraction(settings.workspace_root)
+                    await send_status(websocket, reason="after_start_face_extraction")
+                elif msg_type == "rerun_face_extraction":
+                    await handle_rerun_face_extraction(settings.workspace_root)
+                    await send_status(websocket, reason="after_rerun_face_extraction")
                 elif msg_type == "start_palette_extraction":
                     await handle_start_palette_extraction(settings.workspace_root)
                     await send_status(

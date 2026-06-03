@@ -18,6 +18,14 @@ class ImageMetadataEntry(BaseModel):
         default_factory=list,
         description="Dominant colors as #rrggbb hex strings (up to 3, from Color Thief)",
     )
+    person_ids: list[str] = Field(
+        default_factory=list,
+        description="Global person ids detected in this image (from face extraction)",
+    )
+    faces_scanned: bool = Field(
+        default=False,
+        description="True after this image was processed by face extraction",
+    )
 
     @field_validator("caption", mode="before")
     @classmethod
@@ -45,7 +53,7 @@ class ImageMetadataEntry(BaseModel):
         return not self.caption.strip()
 
     def clear_analysis(self) -> None:
-        """Reset OpenAI-derived fields; keeps path and palette_colors."""
+        """Reset OpenAI-derived fields; keeps path, palette, and face fields."""
         self.caption = ""
         self.number_of_people = 0
         self.has_bride = False
@@ -53,6 +61,10 @@ class ImageMetadataEntry(BaseModel):
         self.has_other_people = False
         self.is_blur = False
         self.quality_score = 0.0
+
+    def clear_faces(self) -> None:
+        self.person_ids = []
+        self.faces_scanned = False
 
     def apply_analysis(
         self,

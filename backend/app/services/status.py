@@ -16,6 +16,10 @@ from app.services.image_metadata import (
     load_metadata_document,
     palette_counts,
 )
+from app.services.face_extraction import (
+    face_scan_counts,
+    get_live_face_progress,
+)
 from app.services.image_categoriser import (
     build_categorisation_gallery,
     categorisation_counts,
@@ -28,9 +32,11 @@ from app.services.pipeline_runner import (
     is_analysis_running,
     is_any_pipeline_job_running,
     is_categorisation_running,
+    is_face_extraction_running,
     is_palette_extract_running,
     is_resize_running,
 )
+from app.services.person_store import load_person_document
 from app.services.openai_settings import is_openai_configured
 from app.services.pipeline_state import (
     compute_library_flags,
@@ -53,6 +59,14 @@ def _resolve_progress(
         completed, total = palette_counts(metadata)
         pending = max(total - completed, 0)
         return ResizeProgress.from_completed(max(pending, 1), 0), "palette"
+
+    if is_face_extraction_running():
+        live = get_live_face_progress()
+        if live is not None:
+            return live, "faces"
+        completed, total = face_scan_counts(metadata)
+        pending = max(total - completed, 0)
+        return ResizeProgress.from_completed(max(pending, 1), 0), "faces"
 
     if is_resize_running():
         live = get_live_resize_progress()
@@ -113,6 +127,7 @@ def build_workspace_status(
     )
     analysis_completed_count, analysis_total_count = caption_counts(metadata)
     palette_completed_count, palette_total_count = palette_counts(metadata)
+    face_completed_count, face_total_count = face_scan_counts(metadata)
 
     resize_completed_count = raw_scan.progress.completed
     resize_total_count = raw_scan.total_images
@@ -129,6 +144,12 @@ def build_workspace_status(
             palette_completed_count = live.completed
             palette_total_count = live.total
 
+    if is_face_extraction_running():
+        live = get_live_face_progress()
+        if live is not None:
+            face_completed_count = live.completed
+            face_total_count = live.total
+
     if is_analysis_running():
         live = get_analysis_progress()
         analysis_completed_count = live.completed
@@ -136,6 +157,7 @@ def build_workspace_status(
 
     gallery = build_categorisation_gallery(workspace_root, metadata)
     categories = load_categories_document(workspace_root)
+    persons_count = len(load_person_document(workspace_root).persons)
     categorisation_completed_count, categorisation_total_count = categorisation_counts(
         gallery,
         categories,
@@ -148,6 +170,11 @@ def build_workspace_status(
             categorisation_total_count = live.total
 
     progress, progress_phase = _resolve_progress(workspace_root, raw_scan, metadata)
+    if is_face_extraction_running() and face_total_count > 0:
+        progress = ResizeProgress.from_completed(
+            face_total_count,
+            face_completed_count,
+        )
     if is_analysis_running() and analysis_total_count > 0:
         progress = ResizeProgress.from_completed(
             analysis_total_count,
@@ -178,6 +205,9 @@ def build_workspace_status(
         analysis_total_count=analysis_total_count,
         categorisation_completed_count=categorisation_completed_count,
         categorisation_total_count=categorisation_total_count,
+        face_completed_count=face_completed_count,
+        face_total_count=face_total_count,
         categories_count=len(categories.categories),
+        persons_count=persons_count,
         openai_configured=is_openai_configured(workspace_root),
     )

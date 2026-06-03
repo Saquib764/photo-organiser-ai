@@ -88,6 +88,8 @@ Optional: set `OPENAI_MODEL` in `backend/.env` (default `gpt-4o-mini`).
 
 Open the **Library state** tab (first tab). Complete the five pipeline steps in order:
 
+![Library state — process management](media/process-management-page.png)
+
 | Step | UI label | What you do |
 |------|----------|-------------|
 | **1** | Images in library | After copying into `raw/`, wait for the green check — at least one image must exist under `workspace/raw/` |

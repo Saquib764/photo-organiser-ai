@@ -10,6 +10,7 @@ class LibraryFlags(BaseModel):
 
     image_found: bool = False
     resize_complete: bool = False
+    people_extraction_complete: bool = False
     has_analysed_color: bool = False
     image_analysis_complete: bool = False
     categorisation_complete: bool = False
@@ -23,6 +24,8 @@ class UserAction(BaseModel):
 class ProcessingTimestamps(BaseModel):
     resize_started_at: datetime | None = None
     resize_completed_at: datetime | None = None
+    face_extraction_started_at: datetime | None = None
+    face_extraction_completed_at: datetime | None = None
     analysis_started_at: datetime | None = None
     analysis_completed_at: datetime | None = None
     categorisation_started_at: datetime | None = None

@@ -149,6 +149,20 @@ export function useWorkspaceSocket() {
     }
   }
 
+  function startFaceExtraction() {
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'start_face_extraction' }))
+      window.setTimeout(() => requestStatus(), 250)
+    }
+  }
+
+  function rerunFaceExtraction() {
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'rerun_face_extraction' }))
+      window.setTimeout(() => requestStatus(), 250)
+    }
+  }
+
   function startPaletteExtraction() {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: 'start_palette_extraction' }))
@@ -172,6 +186,8 @@ export function useWorkspaceSocket() {
     requestStatus,
     startProcessing,
     startPaletteExtraction,
+    startFaceExtraction,
+    rerunFaceExtraction,
     startAnalysis,
     rerunAnalysis,
     startCategorisation,

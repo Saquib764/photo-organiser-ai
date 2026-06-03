@@ -42,6 +42,7 @@ class ImageEntry(BaseModel):
         default_factory=list,
         description="Dominant colors as #rrggbb hex strings (up to 3)",
     )
+    person_ids: list[str] = Field(default_factory=list)
 
 
 class FolderListResponse(BaseModel):
@@ -55,6 +56,9 @@ class CategoryListResponse(BaseModel):
 class ImageListResponse(BaseModel):
     images: list[ImageEntry]
     total: int = Field(ge=0)
+    offset: int = Field(default=0, ge=0)
+    limit: int = Field(default=50, ge=1)
+    has_more: bool = False
 
 
 class ImageDeleteResponse(BaseModel):

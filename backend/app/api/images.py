@@ -91,8 +91,15 @@ async def get_images(
         default=None,
         description="True to show only images not assigned to a story category.",
     ),
+    person_ids: list[str] | None = Query(
+        default=None,
+        description="Person ids; images containing any listed person are included.",
+    ),
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=50, ge=1, le=200),
 ) -> ImageListResponse:
     category_ids = frozenset(categories) if categories else None
+    person_id_filter = frozenset(person_ids) if person_ids else None
     filters = ImageListFilters(
         has_bride=has_bride,
         has_groom=has_groom,
@@ -105,6 +112,7 @@ async def get_images(
         max_quality_score=max_quality_score,
         category_ids=category_ids,
         uncategorized=uncategorized,
+        person_ids=person_id_filter,
     )
     has_filter = any(
         value is not None
@@ -120,14 +128,23 @@ async def get_images(
             max_quality_score,
             category_ids,
             uncategorized,
+            person_id_filter,
         )
     )
-    images = list_processed_images(
+    images, total = list_processed_images(
         settings.workspace_root,
         folders=_parse_folder_filter(folders),
         filters=filters if has_filter else None,
+        offset=offset,
+        limit=limit,
     )
-    return ImageListResponse(images=images, total=len(images))
+    return ImageListResponse(
+        images=images,
+        total=total,
+        offset=offset,
+        limit=limit,
+        has_more=offset + len(images) < total,
+    )
 
 
 @router.delete("/images/{rel_path:path}", response_model=ImageDeleteResponse)

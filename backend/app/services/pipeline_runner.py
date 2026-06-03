@@ -23,11 +23,16 @@ from app.services.image_metadata import (
     save_metadata_document,
     sync_metadata_document,
 )
+from app.services.face_extraction import (
+    clear_face_metadata,
+    extract_people_from_library,
+)
 from app.services.image_processing import (
     ResizeProgress,
     process_all_raw_images,
     scan_raw,
 )
+from app.services.person_store import clear_person_data
 from app.services.openai_settings import load_openai_api_key
 from app.services.pipeline_state import (
     compute_library_flags,
@@ -43,6 +48,7 @@ _lock = asyncio.Lock()
 _resize_running = False
 _analysis_running = False
 _palette_extract_running = False
+_face_extraction_running = False
 _categorisation_running = False
 _analysis_progress = ResizeProgress.empty()
 
@@ -59,6 +65,10 @@ def is_palette_extract_running() -> bool:
     return _palette_extract_running
 
 
+def is_face_extraction_running() -> bool:
+    return _face_extraction_running
+
+
 def is_categorisation_running() -> bool:
     return _categorisation_running
 
@@ -68,6 +78,7 @@ def is_any_pipeline_job_running() -> bool:
         _resize_running
         or _analysis_running
         or _palette_extract_running
+        or _face_extraction_running
         or _categorisation_running
     )
 
@@ -78,6 +89,8 @@ def get_active_processing_phase() -> str | None:
         return "resize"
     if _palette_extract_running:
         return "palette"
+    if _face_extraction_running:
+        return "faces"
     if _analysis_running:
         return "analysis"
     if _categorisation_running:
@@ -92,10 +105,11 @@ def get_analysis_progress() -> ResizeProgress:
 def reset_pipeline_runner_state() -> None:
     """Clear in-memory pipeline flags (used by tests)."""
     global _resize_running, _analysis_running, _palette_extract_running
-    global _categorisation_running, _analysis_progress
+    global _face_extraction_running, _categorisation_running, _analysis_progress
     _resize_running = False
     _analysis_running = False
     _palette_extract_running = False
+    _face_extraction_running = False
     _categorisation_running = False
     _analysis_progress = ResizeProgress.empty()
 
@@ -144,6 +158,7 @@ async def _analyze_metadata_entry(
         result = await analyze_processed_image(
             workspace_root,
             entry.path,
+            person_ids=entry.person_ids,
             client=client,
         )
         entry.apply_analysis(
@@ -269,6 +284,57 @@ async def _run_palette_extraction(workspace_root: Path) -> None:
         _finish_task(workspace_root)
 
 
+async def _claim_face_extraction() -> bool:
+    global _face_extraction_running
+
+    async with _lock:
+        if is_any_pipeline_job_running():
+            logger.warning(
+                "Face extraction not started: another pipeline job is running "
+                "(resize=%s palette=%s analysis=%s categorise=%s face=%s)",
+                _resize_running,
+                _palette_extract_running,
+                _analysis_running,
+                _categorisation_running,
+                _face_extraction_running,
+            )
+            return False
+        _face_extraction_running = True
+    logger.info("Face extraction claimed (running flag set)")
+    return True
+
+
+async def _run_face_extraction(workspace_root: Path, *, force: bool) -> None:
+    global _face_extraction_running
+
+    logger.info("Face extraction task started (force=%s)", force)
+    document = load_state_document(workspace_root)
+    document.processing.face_extraction_started_at = datetime.now(UTC)
+    document.processing.face_extraction_completed_at = None
+    save_state_document(workspace_root, document)
+
+    try:
+        updated = await asyncio.to_thread(
+            extract_people_from_library,
+            workspace_root,
+            only_missing=not force,
+        )
+        if updated:
+            logger.info("Face extraction task finished: %d images processed", updated)
+        else:
+            logger.info("Face extraction task finished: no images processed this run")
+        document = load_state_document(workspace_root)
+        document.processing.face_extraction_completed_at = datetime.now(UTC)
+        save_state_document(workspace_root, document)
+    except Exception:
+        logger.exception("Face extraction task failed")
+        raise
+    finally:
+        async with _lock:
+            _face_extraction_running = False
+        _finish_task(workspace_root)
+
+
 async def maybe_advance_pipeline(workspace_root: Path) -> None:
     """Resume resize or palette extraction when the user has started them."""
     document = load_state_document(workspace_root)
@@ -287,6 +353,15 @@ async def maybe_advance_pipeline(workspace_root: Path) -> None:
     ):
         asyncio.create_task(run_resize(workspace_root))
         return
+
+    if (
+        document.has_action("start_face_extraction")
+        and flags.resize_complete
+        and not flags.people_extraction_complete
+    ):
+        if await _claim_face_extraction():
+            asyncio.create_task(_run_face_extraction(workspace_root, force=False))
+            return
 
     if (
         document.has_action("start_palette_extraction")
@@ -310,6 +385,67 @@ async def handle_start_processing(workspace_root: Path) -> None:
         return
 
     asyncio.create_task(run_resize(workspace_root))
+
+
+async def handle_start_face_extraction(workspace_root: Path) -> None:
+    logger.info("handle_start_face_extraction invoked for %s", workspace_root)
+    record_user_action(workspace_root, "start_face_extraction")
+
+    if is_any_pipeline_job_running():
+        logger.warning("handle_start_face_extraction aborted: pipeline busy")
+        return
+
+    document = load_state_document(workspace_root)
+    raw_scan = scan_raw(workspace_root)
+    flags = compute_library_flags(workspace_root, document, raw_scan=raw_scan)
+    logger.info(
+        "Face extraction preconditions: resize_complete=%s people_complete=%s raw_images=%d",
+        flags.resize_complete,
+        flags.people_extraction_complete,
+        raw_scan.total_images,
+    )
+
+    if not flags.resize_complete:
+        logger.warning("handle_start_face_extraction aborted: resize not complete")
+        return
+
+    if await _claim_face_extraction():
+        logger.info("Scheduling face extraction background task")
+        asyncio.create_task(_run_face_extraction(workspace_root, force=False))
+    else:
+        logger.warning("handle_start_face_extraction aborted: could not claim job")
+
+
+async def handle_rerun_face_extraction(workspace_root: Path) -> None:
+    logger.info("handle_rerun_face_extraction invoked for %s", workspace_root)
+    record_user_action(workspace_root, "rerun_face_extraction")
+
+    document = load_state_document(workspace_root)
+    raw_scan = scan_raw(workspace_root)
+    flags = compute_library_flags(workspace_root, document, raw_scan=raw_scan)
+
+    if not flags.resize_complete:
+        logger.warning("handle_rerun_face_extraction aborted: resize not complete")
+        return
+
+    if is_any_pipeline_job_running():
+        logger.warning("handle_rerun_face_extraction aborted: pipeline busy")
+        return
+
+    metadata = sync_metadata_document(workspace_root)
+    if not metadata.images:
+        logger.warning("handle_rerun_face_extraction aborted: no images in metadata")
+        return
+
+    clear_person_data(workspace_root)
+    clear_face_metadata(metadata)
+    save_metadata_document(workspace_root, metadata)
+
+    if await _claim_face_extraction():
+        logger.info("Scheduling face extraction rerun (force=true)")
+        asyncio.create_task(_run_face_extraction(workspace_root, force=True))
+    else:
+        logger.warning("handle_rerun_face_extraction aborted: could not claim job")
 
 
 async def handle_start_palette_extraction(workspace_root: Path) -> None:

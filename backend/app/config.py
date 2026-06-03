@@ -56,6 +56,32 @@ class Settings(BaseSettings):
         le=400,
         description="Maximum images per categoriser OpenAI call",
     )
+    face_match_threshold: float = Field(
+        default=0.4,
+        ge=0.0,
+        le=1.0,
+        description="Cosine similarity threshold for matching the same person (DeepFace)",
+    )
+    deepface_model: str = Field(
+        default="ArcFace",
+        description="DeepFace recognition model (e.g. ArcFace, Facenet, VGG-Face)",
+    )
+    deepface_detector: str = Field(
+        default="opencv",
+        description="DeepFace detector backend (opencv avoids dlib)",
+    )
+    face_max_dimension: int = Field(
+        default=400,
+        ge=64,
+        le=4096,
+        description="Max width or height when resizing raw images before face detection",
+    )
+    person_thumbnail_size: int = Field(
+        default=128,
+        ge=32,
+        le=512,
+        description="Max width/height for person thumbnail crops",
+    )
     openai_model: str = Field(
         default="gpt-4o-mini",
         description="Vision-capable OpenAI model for image analysis",

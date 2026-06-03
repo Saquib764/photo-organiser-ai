@@ -52,14 +52,29 @@ def test_list_folders(workspace: Path) -> None:
 
 
 def test_list_processed_images_all(workspace: Path) -> None:
-    images = list_processed_images(workspace)
+    images, total = list_processed_images(workspace)
     paths = {img.path for img in images}
     assert paths == {"root.jpg", "album-a/one.png", "album-b/two.webp"}
+    assert total == 3
 
 
 def test_list_processed_images_filtered(workspace: Path) -> None:
-    images = list_processed_images(workspace, folders={"album-a"})
+    images, total = list_processed_images(workspace, folders={"album-a"})
     assert [img.path for img in images] == ["album-a/one.png"]
+    assert total == 1
+
+
+def test_list_processed_images_pagination(workspace: Path) -> None:
+    page0, total = list_processed_images(workspace, offset=0, limit=2)
+    page1, _ = list_processed_images(workspace, offset=2, limit=2)
+    assert total == 3
+    assert len(page0) == 2
+    assert len(page1) == 1
+    assert {img.path for img in page0 + page1} == {
+        "root.jpg",
+        "album-a/one.png",
+        "album-b/two.webp",
+    }
 
 
 def test_resolve_processed_image_path_rejects_traversal(workspace: Path) -> None:
@@ -86,8 +101,11 @@ def test_api_folders_and_images(workspace: Path) -> None:
 
     images_resp = client.get("/api/v1/images", params=[("folders", "album-a")])
     assert images_resp.status_code == 200
-    images = images_resp.json()["images"]
+    payload = images_resp.json()
+    images = payload["images"]
     assert len(images) == 1
+    assert payload["total"] == 1
+    assert payload["has_more"] is False
     assert images[0]["path"] == "album-a/one.png"
     assert "caption" in images[0]
     assert "has_bride" in images[0]
@@ -117,7 +135,7 @@ def test_list_images_includes_metadata(workspace: Path) -> None:
         ),
     )
 
-    images = list_processed_images(workspace)
+    images, _total = list_processed_images(workspace)
     entry = next(img for img in images if img.path == "album-a/one.png")
     assert entry.caption == "Wedding dance"
     assert entry.number_of_people == 2
@@ -151,7 +169,7 @@ def test_list_images_metadata_filters(workspace: Path) -> None:
         ),
     )
 
-    filtered = list_processed_images(
+    filtered, _total = list_processed_images(
         workspace,
         filters=ImageListFilters(has_bride=True),
     )
@@ -181,14 +199,14 @@ def test_list_images_blur_and_quality_filters(workspace: Path) -> None:
     )
 
     scope = {"album-a", "album-b"}
-    sharp = list_processed_images(
+    sharp, _total = list_processed_images(
         workspace,
         folders=scope,
         filters=ImageListFilters(is_blur=False),
     )
     assert {img.path for img in sharp} == {"album-a/one.png"}
 
-    high_quality = list_processed_images(
+    high_quality, _total = list_processed_images(
         workspace,
         folders=scope,
         filters=ImageListFilters(min_quality_score=7.0),
@@ -226,20 +244,20 @@ def test_list_images_category_filters(workspace: Path) -> None:
         ),
     )
 
-    portraits = list_processed_images(
+    portraits, _total = list_processed_images(
         workspace,
         filters=ImageListFilters(category_ids=frozenset({"portraits"})),
     )
     assert [img.path for img in portraits] == ["album-a/one.png"]
     assert portraits[0].category_id == "portraits"
 
-    either = list_processed_images(
+    either, _total = list_processed_images(
         workspace,
         filters=ImageListFilters(category_ids=frozenset({"portraits", "groups"})),
     )
     assert {img.path for img in either} == {"album-a/one.png", "album-b/two.webp"}
 
-    uncategorized = list_processed_images(
+    uncategorized, _total = list_processed_images(
         workspace,
         filters=ImageListFilters(uncategorized=True),
     )

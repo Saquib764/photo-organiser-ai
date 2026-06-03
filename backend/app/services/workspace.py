@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 
 from app.schemas.workspace_status import WorkspaceCounts
+from app.services.person_store import PERSONS_DIR_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ def ensure_workspace_dirs(workspace_root: Path) -> None:
         workspace_root,
         workspace_root / RAW_DIR_NAME,
         workspace_root / PROCESSED_DIR_NAME,
+        workspace_root / PERSONS_DIR_NAME,
     ):
         path.mkdir(parents=True, exist_ok=True)
     logger.info("Workspace ready at %s", workspace_root.resolve())

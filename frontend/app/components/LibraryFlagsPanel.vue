@@ -5,6 +5,7 @@ type FlagRow = {
   description: string
   active: boolean
   isResize?: boolean
+  isFaces?: boolean
   isPalette?: boolean
   isAnalysis?: boolean
   isCategorisation?: boolean
@@ -13,10 +14,12 @@ type FlagRow = {
 const {
   flags,
   isResizePhase,
+  isFacePhase,
   isPalettePhase,
   isAnalysisPhase,
   isCategorisationPhase,
   showResizeProgress,
+  showFaceProgress,
   showPaletteProgress,
   showAnalysisProgress,
   showCategorisationProgress,
@@ -25,16 +28,25 @@ const {
   resizeTotalCount,
   paletteCountText,
   paletteTotalCount,
+  faceCountText,
+  faceTotalCount,
+  personsCountText,
   analysisCountText,
   analysisTotalCount,
   categorisationCountText,
   categorisationTotalCount,
   resizeProgressDetailText,
   paletteProgressDetailText,
+  faceProgressDetailText,
   analysisProgressDetailText,
   categorisationProgressDetailText,
   canStartProcessing,
+  canStartFaceExtraction,
   canStartPalette,
+  showFaceExtractionActions,
+  showStartFaceExtraction,
+  showResumeFaceExtraction,
+  showRerunFaceExtraction,
   showAnalysisActions,
   showAnalysisOpenAiHint,
   showStartAnalysis,
@@ -49,12 +61,54 @@ const {
   actionsDisabled,
   openSettingsTab,
   startProcessing,
+  startFaceExtraction,
+  rerunFaceExtraction,
   startPaletteExtraction,
   startAnalysis,
   rerunAnalysis,
   startCategorisation,
   rerunCategorisation,
 } = useWorkspaceStatusDisplay()
+
+const faceButtons = computed(() => {
+  const buttons: Array<{
+    label: string
+    icon: string
+    color: 'primary' | 'neutral'
+    variant: 'solid' | 'outline'
+    onClick: () => void
+  }> = []
+
+  if (showStartFaceExtraction.value) {
+    buttons.push({
+      label: 'Start',
+      icon: 'i-heroicons-user-group',
+      color: 'primary',
+      variant: 'solid',
+      onClick: startFaceExtraction,
+    })
+  }
+  if (showResumeFaceExtraction.value) {
+    buttons.push({
+      label: 'Resume',
+      icon: 'i-heroicons-play',
+      color: 'primary',
+      variant: 'solid',
+      onClick: startFaceExtraction,
+    })
+  }
+  if (showRerunFaceExtraction.value) {
+    buttons.push({
+      label: 'Rerun',
+      icon: 'i-heroicons-arrow-path',
+      color: 'neutral',
+      variant: 'outline',
+      onClick: rerunFaceExtraction,
+    })
+  }
+
+  return buttons
+})
 
 const analysisButtons = computed(() => {
   const buttons: Array<{
@@ -143,6 +197,15 @@ function flagIcon(row: FlagRow) {
   if (row.key === 'has_analysed_color' && isPalettePhase.value) {
     return { name: 'i-heroicons-swatch', class: 'text-violet-400 animate-spin' }
   }
+  if (row.key === 'people_extraction_complete' && isFacePhase.value) {
+    return { name: 'i-heroicons-user-group', class: 'text-sky-400 animate-spin' }
+  }
+  if (row.key === 'people_extraction_complete') {
+    return {
+      name: row.active ? 'i-heroicons-user-group' : 'i-heroicons-minus-circle',
+      class: row.active ? 'text-sky-400' : 'text-gray-600',
+    }
+  }
   if (row.key === 'has_analysed_color') {
     return {
       name: row.active ? 'i-heroicons-swatch' : 'i-heroicons-minus-circle',
@@ -175,6 +238,15 @@ const flagRows = computed<FlagRow[]>(() => [
     isResize: true,
   },
   {
+    key: 'people_extraction_complete',
+    label: isFacePhase.value ? 'Detecting people' : 'People',
+    description: isFacePhase.value
+      ? 'Finding faces and grouping them across your library'
+      : 'Faces detected and grouped into people',
+    active: flags.value.people_extraction_complete,
+    isFaces: true,
+  },
+  {
     key: 'has_analysed_color',
     label: isPalettePhase.value ? 'Extracting colours' : 'Colours',
     description: isPalettePhase.value
@@ -205,7 +277,7 @@ const flagRows = computed<FlagRow[]>(() => [
 </script>
 
 <template>
-  <ul class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 sm:gap-3">
+  <ul class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6 sm:gap-3">
     <li
       v-for="row in flagRows"
       :key="row.key"
@@ -250,7 +322,7 @@ const flagRows = computed<FlagRow[]>(() => [
           <p
             v-else
             class="mt-1 text-xs leading-snug text-gray-500"
-            :class="(row.isResize && showResizeProgress) || (row.isPalette && showPaletteProgress) || (row.isAnalysis && showAnalysisProgress) || (row.isCategorisation && showCategorisationProgress) ? 'hidden sm:block' : ''"
+            :class="(row.isResize && showResizeProgress) || (row.isFaces && showFaceProgress) || (row.isPalette && showPaletteProgress) || (row.isAnalysis && showAnalysisProgress) || (row.isCategorisation && showCategorisationProgress) ? 'hidden sm:block' : ''"
           >
             {{ row.description }}
           </p>
@@ -281,6 +353,52 @@ const flagRows = computed<FlagRow[]>(() => [
           class="shrink-0 text-xs tabular-nums leading-snug text-gray-400"
         >
           {{ resizeCountText }}
+        </p>
+      </div>
+
+      <LibraryFlagCardProgress
+        v-if="row.isFaces && showFaceProgress"
+        :percent="progressPercent"
+        :detail="faceProgressDetailText"
+        color="info"
+      />
+
+      <div
+        v-else-if="row.isFaces && showFaceExtractionActions"
+        class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-gray-800 pt-3"
+      >
+        <div class="flex min-w-0 flex-wrap gap-1">
+          <UButton
+            v-for="button in faceButtons"
+            :key="button.label"
+            size="xs"
+            :color="button.color"
+            :variant="button.variant"
+            :icon="button.icon"
+            :label="button.label"
+            :disabled="actionsDisabled"
+            @click="button.onClick"
+          />
+        </div>
+        <div
+          v-if="faceTotalCount > 0 || personsCountText"
+          class="shrink-0 text-right text-xs tabular-nums leading-snug text-gray-400"
+        >
+          <p v-if="personsCountText">
+            {{ personsCountText }}
+          </p>
+          <p v-if="faceTotalCount > 0">
+            {{ faceCountText }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        v-else-if="row.isFaces && flags.people_extraction_complete && personsCountText"
+        class="mt-3 border-t border-gray-800 pt-3"
+      >
+        <p class="text-xs tabular-nums leading-snug text-gray-400">
+          {{ personsCountText }} discovered
         </p>
       </div>
 

@@ -37,6 +37,7 @@ class ImageListFilters:
     max_quality_score: float | None = None
     category_ids: frozenset[str] | None = None
     uncategorized: bool | None = None
+    person_ids: frozenset[str] | None = None
 
 
 def _is_image(path: Path) -> bool:
@@ -88,6 +89,7 @@ def _build_image_entry(
         quality_score=metadata.quality_score,
         analyzed=bool(caption),
         palette_colors=list(metadata.palette_colors),
+        person_ids=list(metadata.person_ids),
     )
 
 
@@ -118,6 +120,9 @@ def _matches_filters(entry: ImageEntry, filters: ImageListFilters | None) -> boo
             return False
     if filters.uncategorized is True and entry.category_id is not None:
         return False
+    if filters.person_ids is not None:
+        if not any(person_id in entry.person_ids for person_id in filters.person_ids):
+            return False
 
     return True
 
@@ -157,20 +162,28 @@ def list_processed_images(
     *,
     folders: set[str] | None = None,
     filters: ImageListFilters | None = None,
-) -> list[ImageEntry]:
+    offset: int = 0,
+    limit: int | None = None,
+) -> tuple[list[ImageEntry], int]:
     """
     List images under processed_small/ with metadata from image_metadata.json.
 
     When *folders* is None, all images are returned. Otherwise only images whose
     top-level folder (first path segment) is in *folders* are included.
+
+    Returns a page of entries and the total number of matches (for pagination).
     """
     processed_dir = workspace_root / PROCESSED_DIR_NAME
     if not processed_dir.is_dir():
-        return []
+        return [], 0
+
+    if offset < 0:
+        offset = 0
 
     metadata_map = _metadata_by_path(workspace_root)
     categories_map = category_id_by_path(workspace_root)
-    images: list[ImageEntry] = []
+    page: list[ImageEntry] = []
+    total = 0
 
     for path in sorted(processed_dir.rglob("*")):
         if not _is_image(path):
@@ -187,10 +200,14 @@ def list_processed_images(
             metadata_map.get(rel_path),
             category_id=categories_map.get(rel_path),
         )
-        if _matches_filters(entry, filters):
-            images.append(entry)
+        if not _matches_filters(entry, filters):
+            continue
 
-    return images
+        if total >= offset and (limit is None or len(page) < limit):
+            page.append(entry)
+        total += 1
+
+    return page, total
 
 
 def list_category_summaries(

@@ -15,7 +15,7 @@ const {
         Processing pipeline
       </h2>
       <p class="tf-section-subtitle mb-4">
-        Prepare your library in order: thumbnails, colours, captions, then story categories.
+        Prepare your library in order: thumbnails, people, colours, captions, then story categories.
         Start each step from its card when the previous one is complete.
       </p>
       <LibraryFlagsPanel />

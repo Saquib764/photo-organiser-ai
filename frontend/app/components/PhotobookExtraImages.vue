@@ -13,6 +13,7 @@ const emit = defineEmits<{
 const { rawUrl } = useImageUrls()
 const {
   images,
+  imagesTotal,
   loadingImages,
   imagesError,
   fetchImages,
@@ -47,7 +48,7 @@ const filteredAllImages = computed(() => {
 })
 
 const allImagesLabel = computed(() => {
-  const total = images.value.length
+  const total = imagesTotal.value || images.value.length
   const shown = filteredAllImages.value.length
   if (!total) {
     return 'No images in workspace'
@@ -61,14 +62,14 @@ const allImagesLabel = computed(() => {
 watch(panelTab, (tab) => {
   if (tab === 'all' && !images.value.length && !loadingImages.value) {
     void fetchFolders()
-    void fetchImages()
+    void fetchImages({ limit: 200 })
   }
 })
 
 onMounted(() => {
   if (panelTab.value === 'all') {
     void fetchFolders()
-    void fetchImages()
+    void fetchImages({ limit: 200 })
   }
 })
 

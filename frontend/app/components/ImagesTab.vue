@@ -4,16 +4,21 @@ import { categoryDisplayLabel, cycleTriState, folderDisplayName, whoInPhotoLabel
 const {
   folders,
   images,
+  imagesTotal,
+  hasMoreImages,
   visibleCategories,
   filters,
   hasActiveFilters,
   loadingFolders,
   loadingImages,
+  loadingMoreImages,
   loadingCategories,
   error,
   imagesError,
   mediaUrl,
   fetchFolders,
+  fetchImages,
+  loadMoreImages,
   isFolderSelected,
   toggleFolder,
   setFilter,
@@ -24,14 +29,66 @@ const {
   isCategorySelected,
   setUncategorizedOnly,
   categoriesAvailable,
+  peopleAvailable,
+  togglePerson,
+  isPersonSelected,
   deleteImage,
   isDeleting,
 } = useImageBrowser()
 
+const {
+  persons,
+  personThumbnailUrl,
+  fetchPersons,
+} = usePersons()
+
 const { captionsAvailable } = useWorkspaceStatusDisplay()
 
 const FILTERS_DISABLED_HINT = 'Add your OpenAI key in Settings to describe photos and use these filters.'
+const PEOPLE_FILTERS_DISABLED_HINT = 'Run people detection in Library state to filter by person.'
 const CATEGORIES_DISABLED_HINT = 'Run categorisation in Library to group photos into story categories.'
+
+onMounted(() => {
+  if (peopleAvailable.value) {
+    void fetchPersons()
+  }
+  setupLoadMoreObserver()
+})
+
+watch(peopleAvailable, (available) => {
+  if (available) {
+    void fetchPersons()
+  }
+})
+
+watch(
+  () => persons.value.map(person => person.id),
+  (ids) => {
+    const valid = new Set(ids)
+    const next = filters.value.personIds.filter(id => valid.has(id))
+    if (next.length !== filters.value.personIds.length) {
+      filters.value = { ...filters.value, personIds: next }
+      void fetchImages()
+    }
+  },
+)
+
+function personFilterClass(active: boolean) {
+  if (!peopleAvailable.value) {
+    return 'cursor-not-allowed border-gray-800 bg-gray-900/50 text-gray-600 opacity-50'
+  }
+  return active
+    ? 'border-sky-500/50 bg-sky-500/15 text-sky-300'
+    : 'border-gray-700 bg-gray-900 text-gray-500 hover:border-gray-600 hover:text-gray-400'
+}
+
+const personNameById = computed(() => {
+  const map: Record<string, string> = {}
+  for (const person of persons.value) {
+    map[person.id] = person.name
+  }
+  return map
+})
 
 const categorySearch = ref('')
 
@@ -108,10 +165,27 @@ function applyQualityPreset(min: number | null, max: number | null) {
 }
 
 const slideshowOpen = ref(false)
+const galleryScrollEl = ref<HTMLElement | null>(null)
+const loadMoreSentinel = ref<HTMLElement | null>(null)
 
 const canStartSlideshow = computed(
   () => folders.value.length > 0 && !loadingImages.value && images.value.length > 0,
 )
+
+const imageCountLabel = computed(() => {
+  if (loadingImages.value) {
+    return 'Loading images…'
+  }
+  if (imagesTotal.value === 0) {
+    return '0 images'
+  }
+  const loaded = images.value.length.toLocaleString()
+  const total = imagesTotal.value.toLocaleString()
+  if (images.value.length >= imagesTotal.value) {
+    return `${total} ${imagesTotal.value === 1 ? 'image' : 'images'}`
+  }
+  return `Showing ${loaded} of ${total} images`
+})
 
 function startSlideshow() {
   if (!canStartSlideshow.value) {
@@ -119,6 +193,35 @@ function startSlideshow() {
   }
   slideshowOpen.value = true
 }
+
+let loadMoreObserver: IntersectionObserver | null = null
+
+function setupLoadMoreObserver() {
+  loadMoreObserver?.disconnect()
+  const root = galleryScrollEl.value
+  const sentinel = loadMoreSentinel.value
+  if (!root || !sentinel) {
+    return
+  }
+  loadMoreObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        void loadMoreImages()
+      }
+    },
+    { root, rootMargin: '200px', threshold: 0 },
+  )
+  loadMoreObserver.observe(sentinel)
+}
+
+onBeforeUnmount(() => {
+  loadMoreObserver?.disconnect()
+  loadMoreObserver = null
+})
+
+watch([galleryScrollEl, loadMoreSentinel, hasMoreImages], () => {
+  nextTick(() => setupLoadMoreObserver())
+})
 </script>
 
 <template>
@@ -142,13 +245,7 @@ function startSlideshow() {
           class="mt-2 flex items-center gap-2"
         >
           <p class="text-xs text-gray-500">
-            <template v-if="loadingImages">
-              Loading images…
-            </template>
-            <template v-else>
-              {{ images.length.toLocaleString() }}
-              {{ images.length === 1 ? 'image' : 'images' }}
-            </template>
+            {{ imageCountLabel }}
           </p>
           <UButton
             v-if="canStartSlideshow"
@@ -346,6 +443,50 @@ function startSlideshow() {
 
           <section
             class="space-y-2 border-t border-gray-800 pt-5"
+            :class="{ 'opacity-90': !peopleAvailable }"
+          >
+            <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+              People
+            </h3>
+
+            <p
+              v-if="!peopleAvailable"
+              class="text-xs text-gray-500"
+            >
+              {{ PEOPLE_FILTERS_DISABLED_HINT }}
+            </p>
+
+            <div
+              v-else-if="persons.length === 0"
+              class="text-xs text-gray-500"
+            >
+              No people found in this library.
+            </div>
+
+            <div
+              v-else
+              class="flex flex-col gap-1.5"
+            >
+              <button
+                v-for="person in persons"
+                :key="person.id"
+                type="button"
+                class="inline-flex w-full cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-1.5 text-left text-xs font-medium transition-colors"
+                :class="personFilterClass(isPersonSelected(person.id))"
+                @click="togglePerson(person.id)"
+              >
+                <img
+                  :src="personThumbnailUrl(person)"
+                  :alt="person.name"
+                  class="size-6 shrink-0 rounded-full object-cover ring-1 ring-gray-700"
+                >
+                <span class="min-w-0 flex-1 truncate">{{ person.name }}</span>
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="space-y-2 border-t border-gray-800 pt-5"
             :class="{ 'opacity-90': !categoriesAvailable }"
           >
             <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500">
@@ -437,7 +578,10 @@ function startSlideshow() {
 
     <!-- Right: image grid (scrollable) -->
     <div class="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-gray-950">
-      <div class="min-h-0 flex-1 overflow-y-auto p-5">
+      <div
+        ref="galleryScrollEl"
+        class="min-h-0 flex-1 overflow-y-auto p-5"
+      >
         <UAlert
           v-if="imagesError"
           class="mb-4"
@@ -532,7 +676,8 @@ function startSlideshow() {
                 </p>
                 <div
                   v-if="
-                    image.number_of_people > 0
+                    image.person_ids.length > 0
+                      || image.number_of_people > 0
                       || image.has_bride
                       || image.has_groom
                       || image.has_other_people
@@ -542,6 +687,13 @@ function startSlideshow() {
                   "
                   class="mt-1.5 flex flex-wrap gap-1"
                 >
+                  <span
+                    v-for="personId in image.person_ids"
+                    :key="personId"
+                    class="rounded bg-sky-500/30 px-1 py-px text-[9px] text-sky-200"
+                  >
+                    {{ personNameById[personId] ?? personId }}
+                  </span>
                   <span
                     v-if="image.number_of_people > 0"
                     class="rounded bg-white/15 px-1 py-px text-[9px] text-gray-200"
@@ -589,6 +741,25 @@ function startSlideshow() {
               </div>
             </div>
           </figure>
+        </div>
+
+        <div
+          v-if="images.length > 0"
+          ref="loadMoreSentinel"
+          class="flex min-h-12 items-center justify-center py-6"
+        >
+          <p
+            v-if="loadingMoreImages"
+            class="text-xs text-gray-500"
+          >
+            Loading more images…
+          </p>
+          <p
+            v-else-if="!hasMoreImages"
+            class="text-xs text-gray-600"
+          >
+            All images loaded
+          </p>
         </div>
       </div>
     </div>

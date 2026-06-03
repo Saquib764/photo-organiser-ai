@@ -30,5 +30,8 @@ class WorkspaceStatus(WorkspaceCounts):
     analysis_total_count: int = 0
     categorisation_completed_count: int = 0
     categorisation_total_count: int = 0
+    face_completed_count: int = 0
+    face_total_count: int = 0
     categories_count: int = 0
+    persons_count: int = 0
     openai_configured: bool = False

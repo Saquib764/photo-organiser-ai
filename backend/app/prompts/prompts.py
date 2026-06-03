@@ -21,7 +21,10 @@ Return structured metadata for the image:
   grand or sweeping compositions, sharp focus, flattering light, and strong composition.
   Score lower for blur, poor lighting, awkward cropping, or weak composition.
 
-Use false for has_bride, has_groom, and has_other_people when unsure or not applicable."""
+Use false for has_bride, has_groom, and has_other_people when unsure or not applicable.
+
+When the user message lists known people (id and description from face recognition), treat them as
+ground truth for who appears in the photo. Use those ids and roles in the caption when relevant."""
 
 
 IMAGE_CATEGORISER_SYSTEM_PROMPT = """You are an image categorisation assistant for wedding and event photobook planning.

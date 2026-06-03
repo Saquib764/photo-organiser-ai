@@ -10,6 +10,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.images import router as images_router
+from app.api.persons import router as persons_router
 from app.api.photobook import router as photobook_router
 from app.api.prompt_templates import router as prompt_templates_router
 from app.api.settings import router as settings_router
@@ -57,6 +58,7 @@ app.add_middleware(
 )
 
 app.include_router(images_router)
+app.include_router(persons_router)
 app.include_router(photobook_router)
 app.include_router(prompt_templates_router)
 app.include_router(settings_router)

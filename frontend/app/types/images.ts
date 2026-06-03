@@ -21,6 +21,7 @@ export interface ImageEntry {
   is_blur: boolean
   quality_score: number
   analyzed: boolean
+  person_ids: string[]
 }
 
 export interface ImageFilters {
@@ -35,6 +36,7 @@ export interface ImageFilters {
   maxQualityScore: number | null
   categoryIds: string[]
   uncategorizedOnly: boolean
+  personIds: string[]
 }
 
 export const EMPTY_IMAGE_FILTERS: ImageFilters = {
@@ -49,6 +51,7 @@ export const EMPTY_IMAGE_FILTERS: ImageFilters = {
   maxQualityScore: null,
   categoryIds: [],
   uncategorizedOnly: false,
+  personIds: [],
 }
 
 export type TriStateFilter = boolean | null
@@ -60,7 +63,12 @@ export interface FolderListResponse {
 export interface ImageListResponse {
   images: ImageEntry[]
   total: number
+  offset: number
+  limit: number
+  has_more: boolean
 }
+
+export const IMAGE_PAGE_SIZE = 50
 
 /** API token for images directly under raw/ (folder name is empty). */
 export const ROOT_FOLDER_TOKEN = '__root__'

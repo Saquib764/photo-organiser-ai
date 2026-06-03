@@ -70,7 +70,7 @@ def ensure_compose_extra_images(
 
 
 def build_gallery(workspace_root: Path) -> list[GalleryImageSummary]:
-    entries = list_processed_images(workspace_root, folders=None, filters=None)
+    entries, _total = list_processed_images(workspace_root, folders=None, filters=None)
     return [GalleryImageSummary.model_validate(entry.model_dump()) for entry in entries]
 
 

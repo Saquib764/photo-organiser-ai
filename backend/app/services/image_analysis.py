@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import json
 import logging
 from pathlib import Path
 
@@ -13,13 +14,47 @@ from app.schemas.image_analysis import ImageAnalysisResult
 from app.prompts.prompts import IMAGE_ANALYSIS_SYSTEM_PROMPT
 from app.services.image_files import media_type_for_path, resolve_processed_image_path
 from app.services.openai_settings import load_openai_api_key
+from app.services.person_store import load_person_document, person_by_id
 
 logger = logging.getLogger(__name__)
+
+
+def build_analysis_user_prompt(
+    workspace_root: Path,
+    person_ids: list[str] | None = None,
+) -> str:
+    """Build the vision user text, including known people when face extraction tagged them."""
+    if not person_ids:
+        return "Analyze this photograph and return the metadata."
+
+    people = person_by_id(load_person_document(workspace_root))
+    known_people: list[dict[str, str]] = []
+    for person_id in person_ids:
+        person = people.get(person_id)
+        if person is None:
+            known_people.append({"id": person_id, "description": ""})
+        else:
+            known_people.append(
+                {
+                    "id": person.id,
+                    "description": person.description.strip() or person.name,
+                },
+            )
+
+    people_json = json.dumps(known_people, indent=2)
+    return (
+        "Known people in this photo (from face recognition):\n"
+        f"{people_json}\n\n"
+        "Analyze this photograph and return the metadata. "
+        "When describing who appears, use these ids and descriptions where relevant."
+    )
+
 
 async def analyze_processed_image(
     workspace_root: Path,
     relative_path: str,
     *,
+    person_ids: list[str] | None = None,
     client: AsyncOpenAI | None = None,
 ) -> ImageAnalysisResult:
     """Send one processed thumbnail to OpenAI and return structured metadata."""
@@ -48,7 +83,7 @@ async def analyze_processed_image(
                 "content": [
                     {
                         "type": "text",
-                        "text": "Analyze this photograph and return the metadata.",
+                        "text": build_analysis_user_prompt(workspace_root, person_ids),
                     },
                     {"type": "image_url", "image_url": {"url": data_url}},
                 ],

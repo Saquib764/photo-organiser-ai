@@ -4,6 +4,7 @@ const activeTab = useState('document-active-tab', () => 'library')
 const tabs = [
   { label: 'Library state', value: 'library', icon: 'i-heroicons-signal' },
   { label: 'Images', value: 'images', icon: 'i-heroicons-photo' },
+  { label: 'People', value: 'people', icon: 'i-heroicons-user-group' },
   { label: 'Photobook', value: 'photobook', icon: 'i-heroicons-book-open' },
   { label: 'Layouts', value: 'layouts', icon: 'i-heroicons-squares-2x2' },
   { label: 'Settings', value: 'settings', icon: 'i-heroicons-cog-6-tooth' },
@@ -41,6 +42,7 @@ const tabs = [
     >
       <LibraryStateTab v-if="activeTab === 'library'" />
       <ImagesTab v-else-if="activeTab === 'images'" />
+      <PersonsTab v-else-if="activeTab === 'people'" />
       <PhotobookTab v-else-if="activeTab === 'photobook'" />
       <LayoutLibraryTab v-else-if="activeTab === 'layouts'" />
       <SettingsTab v-else-if="activeTab === 'settings'" />

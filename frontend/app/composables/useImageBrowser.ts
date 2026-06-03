@@ -1,5 +1,5 @@
 import type { FolderInfo, ImageCategoryInfo, ImageEntry, ImageFilters } from '~/types/images'
-import { EMPTY_IMAGE_FILTERS, folderApiToken } from '~/types/images'
+import { EMPTY_IMAGE_FILTERS, folderApiToken, IMAGE_PAGE_SIZE, type ImageListResponse } from '~/types/images'
 
 function appendFilterParams(params: URLSearchParams, filters: ImageFilters) {
   if (filters.hasBride !== null) {
@@ -35,6 +35,9 @@ function appendFilterParams(params: URLSearchParams, filters: ImageFilters) {
   if (filters.uncategorizedOnly) {
     params.set('uncategorized', 'true')
   }
+  for (const id of filters.personIds) {
+    params.append('person_ids', id)
+  }
 }
 
 function appendFolderParams(params: URLSearchParams, folderNames: Set<string>) {
@@ -45,7 +48,7 @@ function appendFolderParams(params: URLSearchParams, folderNames: Set<string>) {
 
 export function useImageBrowser() {
   const { apiBase, mediaUrl, rawUrl } = useImageUrls()
-  const { captionsAvailable, status } = useWorkspaceStatusDisplay()
+  const { captionsAvailable, peopleAvailable, status } = useWorkspaceStatusDisplay()
 
   const folders = ref<FolderInfo[]>([])
   const selectedFolders = ref<Set<string>>(new Set())
@@ -54,15 +57,20 @@ export function useImageBrowser() {
   /** True when image_categories.json has at least one category (from API, not WebSocket). */
   const categoriesAvailable = computed(() => categories.value.length > 0)
   const images = ref<ImageEntry[]>([])
+  const imagesTotal = ref(0)
+  const hasMoreImages = ref(false)
   const filters = ref<ImageFilters>({ ...EMPTY_IMAGE_FILTERS })
   const loadingFolders = ref(false)
   const loadingImages = ref(false)
+  const loadingMoreImages = ref(false)
   const loadingCategories = ref(false)
   const deletingPaths = ref<Set<string>>(new Set())
   /** Folder list fetch failures (sidebar). */
   const error = ref<string | null>(null)
   /** Image list fetch failures (grid); does not clear folders. */
   const imagesError = ref<string | null>(null)
+
+  let fetchGeneration = 0
 
   function imageDeleteUrl(path: string): string {
     const encoded = path.split('/').map(segment => encodeURIComponent(segment)).join('/')
@@ -77,9 +85,21 @@ export function useImageBrowser() {
       if (key === 'uncategorizedOnly') {
         return value === true
       }
+      if (key === 'personIds') {
+        return (value as string[]).length > 0
+      }
       return value !== null
     }),
   )
+
+  function buildImageQueryParams(offset: number, limit: number): URLSearchParams {
+    const params = new URLSearchParams()
+    appendFolderParams(params, selectedFolders.value)
+    appendFilterParams(params, filters.value)
+    params.set('offset', String(offset))
+    params.set('limit', String(limit))
+    return params
+  }
 
   async function fetchCategories() {
     loadingCategories.value = true
@@ -116,6 +136,8 @@ export function useImageBrowser() {
       error.value = e instanceof Error ? e.message : 'Failed to load folders'
       folders.value = []
       images.value = []
+      imagesTotal.value = 0
+      hasMoreImages.value = false
       categories.value = []
       return
     }
@@ -128,32 +150,83 @@ export function useImageBrowser() {
     }
   }
 
-  async function fetchImages() {
+  async function fetchImagePage(reset: boolean, limit = IMAGE_PAGE_SIZE) {
     if (selectedFolders.value.size === 0) {
       images.value = []
+      imagesTotal.value = 0
+      hasMoreImages.value = false
       imagesError.value = null
       return
     }
 
-    loadingImages.value = true
-    imagesError.value = null
-    try {
-      const params = new URLSearchParams()
-      appendFolderParams(params, selectedFolders.value)
-      appendFilterParams(params, filters.value)
+    const generation = ++fetchGeneration
+    const offset = reset ? 0 : images.value.length
 
-      const data = await $fetch<{ images: ImageEntry[], total: number }>(
-        `${apiBase}/api/v1/images?${params.toString()}`,
+    if (reset) {
+      loadingImages.value = true
+      imagesError.value = null
+      images.value = []
+      imagesTotal.value = 0
+      hasMoreImages.value = false
+    }
+    else {
+      loadingMoreImages.value = true
+    }
+
+    try {
+      const data = await $fetch<ImageListResponse>(
+        `${apiBase}/api/v1/images?${buildImageQueryParams(offset, limit).toString()}`,
       )
-      images.value = data.images
+      if (generation !== fetchGeneration) {
+        return
+      }
+
+      if (reset) {
+        images.value = data.images
+      }
+      else {
+        images.value = [...images.value, ...data.images]
+      }
+      imagesTotal.value = data.total
+      hasMoreImages.value = data.has_more
     }
     catch (e) {
+      if (generation !== fetchGeneration) {
+        return
+      }
       imagesError.value = e instanceof Error ? e.message : 'Failed to load images'
-      images.value = []
+      if (reset) {
+        images.value = []
+        imagesTotal.value = 0
+        hasMoreImages.value = false
+      }
     }
     finally {
-      loadingImages.value = false
+      if (generation === fetchGeneration) {
+        if (reset) {
+          loadingImages.value = false
+        }
+        else {
+          loadingMoreImages.value = false
+        }
+      }
     }
+  }
+
+  async function fetchImages(options?: { limit?: number }) {
+    await fetchImagePage(true, options?.limit ?? IMAGE_PAGE_SIZE)
+  }
+
+  async function loadMoreImages() {
+    if (
+      selectedFolders.value.size === 0
+      || !hasMoreImages.value
+      || loadingImages.value
+      || loadingMoreImages.value
+    ) {
+      return
+    }
+    await fetchImagePage(false)
   }
 
   function isFolderSelected(name: string): boolean {
@@ -236,6 +309,25 @@ export function useImageBrowser() {
     void fetchImages()
   }
 
+  function togglePerson(id: string) {
+    if (!peopleAvailable.value) {
+      return
+    }
+    const current = new Set(filters.value.personIds)
+    if (current.has(id)) {
+      current.delete(id)
+    }
+    else {
+      current.add(id)
+    }
+    filters.value = { ...filters.value, personIds: [...current] }
+    void fetchImages()
+  }
+
+  function isPersonSelected(id: string): boolean {
+    return filters.value.personIds.includes(id)
+  }
+
   function isDeleting(path: string): boolean {
     return deletingPaths.value.has(path)
   }
@@ -257,6 +349,7 @@ export function useImageBrowser() {
     try {
       await $fetch(imageDeleteUrl(path), { method: 'DELETE' })
       images.value = images.value.filter(image => image.path !== path)
+      imagesTotal.value = Math.max(0, imagesTotal.value - 1)
       await Promise.all([fetchFolders(), fetchCategories()])
       return true
     }
@@ -311,6 +404,13 @@ export function useImageBrowser() {
     },
   )
 
+  watch(peopleAvailable, (available) => {
+    if (!available && filters.value.personIds.length > 0) {
+      filters.value = { ...filters.value, personIds: [] }
+      void fetchImages()
+    }
+  })
+
   onMounted(() => {
     void fetchFolders()
   })
@@ -321,18 +421,23 @@ export function useImageBrowser() {
     categories,
     visibleCategories,
     images,
+    imagesTotal,
+    hasMoreImages,
     filters,
     hasActiveFilters,
     loadingFolders,
     loadingImages,
+    loadingMoreImages,
     loadingCategories,
     error,
     imagesError,
     mediaUrl,
     rawUrl,
     categoriesAvailable,
+    peopleAvailable,
     fetchFolders,
     fetchImages,
+    loadMoreImages,
     fetchCategories,
     isFolderSelected,
     toggleFolder,
@@ -343,6 +448,8 @@ export function useImageBrowser() {
     toggleCategory,
     isCategorySelected,
     setUncategorizedOnly,
+    togglePerson,
+    isPersonSelected,
     deleteImage,
     isDeleting,
   }

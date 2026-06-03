@@ -17,7 +17,7 @@ dist/
 workspace/raw/
 workspace/processed_small/
 workspace/*.json
-
+workspace/persons/
 # Env
 .env
 .env.local
